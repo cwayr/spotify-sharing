@@ -1,9 +1,7 @@
-'''Basic test to ensure Travis CI build passes'''
+'''Basic test to ensure CI build passes'''
 
-import pytest
+def increment(x):
+    return x + 1
 
-def addition(x, y):
-    return x + y
-
-def test_addition():
-    assert addition(2, 2) == 4
+def test_answer():
+    assert increment(3) == 4
