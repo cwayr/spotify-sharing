@@ -1,21 +1,29 @@
-from flask import Flask, render_template
+from flask import Flask
+from models import db, connect_db, User
+from flask_login import LoginManager
 
-from models import connect_db
+from routes.landing_routes import landing_routes
+from routes.user_routes import user_routes
 
 app = Flask(__name__)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 if app.config["ENV"] == "production":
     app.config.from_object('config.ProductionConfig')
 elif app.config["ENV"] == "testing":
     app.config.from_object('config.TestingConfig')
 else:
-    app.config.from_object('config.developmentConfig')
+    app.config.from_object('config.DevelopmentConfig')
 
 connect_db(app)
+db.create_all()
 
+app.register_blueprint(landing_routes)
+app.register_blueprint(user_routes)
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-
-    """Handle user signup."""
-    return render_template('base.html')
+# flask login
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
