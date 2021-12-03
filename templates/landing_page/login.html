@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+<!--  -->
+{% block style %}
+<link rel="stylesheet" href="/static/landing.css" />
+{% endblock %}
+<!--  -->
+{% block content %}
+<div class="login-header">
+  <h1>Sign in to Spotify Sharing</h1>
+</div>
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" method="POST" novalidate="True">
+      {{ form.hidden_tag() }}
+      <!--  -->
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <!--  -->
+      {{ field(placeholder=field.description) }}
+      <!--  -->
+      {% for error in field.errors %}
+      <p class="error-message">{{ error }}</p>
+      {% endfor %}
+      <!--  -->
+      {% endfor %}
+      <!--  -->
+      <button type="submit">Log in</button>
+      <p class="message">
+        Don't have an account? <a href="/signup">Sign up</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endblock %}
