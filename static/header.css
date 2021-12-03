@@ -1,0 +1,26 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 46px 1fr;
+}
+
+.header {
+  position: static;
+  background: #94b0da;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.header-right {
+  font-family: "Short Stack", cursive;
+  float: right;
+  margin-right: 20px;
+  font-size: 16px;
+}
+
+.header-left {
+  font-family: "Finger Paint", cursive;
+  float: left;
+  margin: auto;
+  font-size: 20px;
+}
