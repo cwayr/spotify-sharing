@@ -10,6 +10,9 @@
     <nav>
       <p class="header-left">Spotify Sharing</p>
       <a class="header-right" href="/logout">Logout</a>
+      <a class="header-right" href="/user/{{ user.id }}"
+        >{{ user.full_name }}</a
+      >
     </nav>
   </div>
   <div class="main-section">{% block morecontent %} {% endblock %}</div>
