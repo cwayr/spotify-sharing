@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+<!--  -->
+{% block style %}
+<link rel="stylesheet" href="/static/header.css" />
+{% block morestyle %} {% endblock %} {% endblock %}
+<!--  -->
+{% block content %}
+<div class="page">
+  <div class="header">
+    <nav>
+      <p class="header-left">Spotify Sharing</p>
+      <a class="header-right" href="/logout">Logout</a>
+    </nav>
+  </div>
+  <div class="main-section">{% block morecontent %} {% endblock %}</div>
+</div>
+{% endblock %}
