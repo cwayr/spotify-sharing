@@ -1,11 +1,12 @@
 {% extends 'header.html' %}
 <!--  -->
-<!-- {% block title %} {{ user.username }} {% endblock %} -->
-<!--  -->
 {% block morestyle %}
 <link rel="stylesheet" href="/static/user.css" />
 {% endblock %}
 <!--  -->
 {% block morecontent %}
-<h1>{{ user.full_name }}</h1>
+<div class="user-details">
+  <h1>{{ user.full_name }}</h1>
+  <h3>@{{ user.username }}</h3>
+</div>
 {% endblock %}

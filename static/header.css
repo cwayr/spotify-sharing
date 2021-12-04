@@ -10,9 +10,10 @@
   height: 30px;
   padding: 10px;
   overflow: hidden;
-  box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.7);
-  -webkit-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.7);
-  -moz-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.6);
+  z-index: 1;
 }
 
 .header-right {
