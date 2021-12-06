@@ -35,7 +35,7 @@ class TestLandingRoutes(TestCase):
     def test_signup(self):
         """Test user_signup method."""
 
-        new_user = User.user_signup(name='Test User', username='testuser', password='password')
+        new_user = User(full_name='Test User', username='testuser', password='password')
         db.session.add(new_user)
         db.session.commit()
 
@@ -54,7 +54,7 @@ class TestLandingRoutes(TestCase):
                 'username': 'atestuser',
                 'password': 'mypassword',
                 'confirm_password': 'mypassword'
-            }, follow_redirects=False)
+            })
 
             self.assertEqual(resp.status_code, 302)
 

@@ -3,7 +3,7 @@
 {% block morecontent %}
 <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
 <div class="new-group">
-  <form class="form" , method="POST">
+  <form class="form" method="POST" novalidate="True">
     <h2>Create new group</h2>
     {{ form.hidden_tag() }}
     <!--  -->
