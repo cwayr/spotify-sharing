@@ -25,6 +25,7 @@ class TestingConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'postgresql:///spotify_sharing_test' # os.environ.get('TEST_DATABASE_URL')
     ENV = 'testing'
+    LOGIN_DISABLED = True # https://flask-login.readthedocs.io/en/latest/
     WTF_CSRF_ENABLED = False
 
 

@@ -9,4 +9,13 @@
   <h1>{{ user.full_name }}</h1>
   <h3>@{{ user.username }}</h3>
 </div>
+<div class="profile-content">
+  <div class="groups">
+    <h2>My groups</h2>
+    <form action="/user/{{ user.id }}/group">
+      <button>New group</button>
+    </form>
+  </div>
+</div>
+
 {% endblock %}
