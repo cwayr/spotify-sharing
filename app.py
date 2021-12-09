@@ -4,6 +4,7 @@ from flask_login import LoginManager
 
 from routes.landing_routes import landing_routes
 from routes.user_routes import user_routes
+from routes.group_routes import group_routes
 
 app = Flask(__name__)
 
@@ -22,6 +23,7 @@ db.create_all()
 
 app.register_blueprint(landing_routes)
 app.register_blueprint(user_routes)
+app.register_blueprint(group_routes)
 
 # flask login
 @login_manager.user_loader

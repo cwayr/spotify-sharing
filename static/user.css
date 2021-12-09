@@ -7,3 +7,38 @@
 .profile-content {
   padding: 20px;
 }
+
+.group-badge {
+  width: calc(33% - 15px);
+  height: 90px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  background-color: #b6b8c9;
+  border-radius: 4px;
+}
+
+.group-badge h3 {
+  font-size: 1em;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-badge h4 {
+  font-size: 0.8em;
+  font-weight: 50;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+}
+
+.group-badge p {
+  font-size: 0.9em;
+  margin-top: 5px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
