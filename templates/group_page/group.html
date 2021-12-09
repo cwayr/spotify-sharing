@@ -1,0 +1,10 @@
+{% extends 'header.html' %}
+<!-- -->
+{% block morestyle%}
+<link rel="stylesheet" href="/static/group.css" />
+{% endblock %}
+<!--  -->
+{% block morecontent %}
+<a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
+<h1 class="group-title">{{ group.name }}</h1>
+{% endblock %}

@@ -11,6 +11,7 @@ body {
     rgb(209, 217, 231) 100%
   );
   background-attachment: fixed;
+  overflow: hidden;
 }
 
 a {
@@ -28,6 +29,7 @@ button {
 }
 
 .back-btn {
+  position: absolute;
   margin: 20px 0 0 15px;
 }
 
@@ -113,4 +115,32 @@ button {
   font-size: 12px;
   font-weight: 800;
   margin: 0;
+}
+
+/* POPUPS */
+
+.pop-up {
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  row-gap: 20px;
+  box-sizing: border-box;
+  height: 90%;
+  width: 50%;
+  min-width: 400px;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #fff;
+  box-shadow: rgba(50, 50, 93, 0.25) 0 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0 30px 60px -30px;
+  border-radius: 4%;
+  overflow-y: scroll;
+}
+
+.pop-up::-webkit-scrollbar {
+  display: none;
 }

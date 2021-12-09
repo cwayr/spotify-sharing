@@ -12,8 +12,12 @@
 <div class="profile-content">
   <div class="groups">
     <h2>My groups</h2>
-    <form action="/user/{{ user.id }}/group">
+    <form action="/user/{{ user.id }}/new-group">
       <button>New group</button>
+    </form>
+    <h2>Joined groups</h2>
+    <form action="/user/{{ user.id }}/browse-groups">
+      <button>Browse groups</button>
     </form>
   </div>
 </div>
