@@ -13,7 +13,15 @@ def user_page(user_id):
 
     user = User.query.get(user_id)
 
-    return render_template("user-page.html", user=user)
+    # groups a user has created
+    created_groups = Group.query.filter_by(admin_id=user_id).all()
+
+    # groups a user has joined
+    users_groups = UserGroup.query.filter_by(user_id=user_id).all()
+    joined_group_ids = [group.group_id for group in users_groups]
+    joined_groups = Group.query.filter(Group.admin_id != user_id).filter(Group.id.in_(joined_group_ids)).all()
+
+    return render_template("user-page.html", user=user, created_groups=created_groups, joined_groups=joined_groups)
 
 
 @user_routes.route("/user/<int:user_id>/new-group", methods=["GET", "POST"])
