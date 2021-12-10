@@ -28,12 +28,12 @@ def create_new_group(user_id):
         name = form.name.data
         description = form.description.data
 
-        newGroup = Group(name=name, description=description, admin_id=user_id)
-        db.session.add(newGroup)
+        new_group = Group(name=name, description=description, admin_id=user_id)
+        db.session.add(new_group)
         db.session.commit()
 
-        newUserGroup = UserGroup(user_id=user_id, group_id=newGroup.id)
-        db.session.add(newUserGroup)
+        new_user_group = UserGroup(user_id=user_id, group_id=new_group.id)
+        db.session.add(new_user_group)
         db.session.commit()
 
         return redirect(f"/user/{user_id}")
@@ -48,8 +48,8 @@ def browse_created_groups(user_id):
 
     user = User.query.get(user_id)
 
-    joinedGroups = UserGroup.query.filter_by(user_id=user_id).all()
-    joinedGroupsIds = [group.group_id for group in joinedGroups]
-    groups = Group.query.filter(Group.admin_id != user_id).filter(Group.id.notin_(joinedGroupsIds)).all()
+    joined_groups = UserGroup.query.filter_by(user_id=user_id).all()
+    joined_group_ids = [group.group_id for group in joined_groups]
+    groups = Group.query.filter(Group.admin_id != user_id).filter(Group.id.notin_(joined_group_ids)).all()
 
     return render_template("browse-groups.html", user=user, groups=groups)

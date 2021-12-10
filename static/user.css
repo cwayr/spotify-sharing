@@ -4,6 +4,14 @@
   padding: 20px;
 }
 
+.user-details h1 {
+  word-wrap: break-word;
+}
+
+.user-details h3 {
+  word-wrap: break-word;
+}
+
 .profile-content {
   padding: 20px;
 }

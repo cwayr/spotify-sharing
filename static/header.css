@@ -31,3 +31,9 @@
   margin-left: 16px;
   font-size: 20px;
 }
+
+.main-section {
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  box-sizing: border-box;
+}

@@ -1,3 +1,19 @@
 .group-title {
   text-align: center;
 }
+
+.group-actions-form {
+  display: inline;
+}
+
+.join-btn {
+  position: relative;
+  background: #94b0da;
+  color: #fff;
+}
+
+.leave-btn {
+  position: relative;
+  background: #f77777;
+  color: #fff;
+}
