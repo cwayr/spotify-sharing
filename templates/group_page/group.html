@@ -7,7 +7,8 @@
 {% block morecontent %}
 <div class="left">
   <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
-  {% if user_in_group%}
+  {% if group.admin_id != user.id %} {% if user_in_group %}
+  <!-- non-admin buttons -->
   <form
     class="group-actions-form"
     method="DELETE"
@@ -22,6 +23,15 @@
     action="/user/{{ user.id }}/group/{{ group.id }}/join"
   >
     <button type="submit" class="join-btn">Join group</button>
+  </form>
+  {% endif %} {% else %}
+  <!-- admin buttons -->
+  <form
+    class="group-actions-form"
+    method="PATCH"
+    action="/user/{{ user.id }}/group/{{ group.id }}/edit"
+  >
+    <button type="submit" class="edit-btn">Edit group</button>
   </form>
   {% endif %}
 </div>

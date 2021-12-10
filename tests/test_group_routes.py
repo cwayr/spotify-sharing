@@ -62,6 +62,16 @@ class TestGroupRoutes(TestCase):
             self.assertIn("Test Group</h1>", html)
 
 
+    def test_admin_group_view(self):
+        """Test group page displays correctly to admin."""
+
+        with app.test_client() as client:
+            resp = client.get('/user/1/group/1')
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Edit group", html)
+
+
     def test_join_group(self):
         """Test joining a group works."""
 
@@ -114,3 +124,27 @@ class TestGroupRoutes(TestCase):
             user3_not_in_group = UserGroup.query.filter_by(user_id=3).all()
 
             self.assertEqual(len(user3_not_in_group), 0)
+
+
+    def test_edit_group(self):
+        """Test editing a group works."""
+
+        with app.test_client() as client:
+            # follow_redirects=false
+            resp = client.post('/user/1/group/1/edit', data = {'name': 'Test Group', 'description': 'Is the group really for testing?'})
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 302)
+
+            # follow_redirects=true
+            redirect_resp = client.post('/user/1/group/1/edit', data = {'name': 'Test Group Edited', 'description': 'It really is for testing!'}, follow_redirects=True)
+            html = redirect_resp.get_data(as_text=True)
+
+            self.assertEqual(redirect_resp.status_code, 200)
+            self.assertIn("Edit group", html)
+
+            # check db
+            group = Group.query.filter_by(id=1).first()
+
+            self.assertEqual(group.name, 'Test Group Edited')
+            self.assertEqual(group.description, "It really is for testing!")
