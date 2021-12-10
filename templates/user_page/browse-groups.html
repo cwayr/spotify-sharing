@@ -5,25 +5,31 @@
 {% endblock %}
 <!--  -->
 {% block morecontent %}
-<a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
-<div class="pop-up">
-  <!--  -->
-  {% if (groups is defined) and groups %}
-  <!--  -->
-  {% for group in groups %}
-  <div class="group-badge">
-    <a href="/user/{{ user.id }}/group/{{ group.id }}">
-      <h3>{{ group.name}}</h3>
-      <h4>_ members</h4>
-      <p>{{ group.description }}</p>
-    </a>
-  </div>
-
-  {% endfor %}
-  <!--  -->
-  {% else %}
-  <h1>No available groups</h1>
-  {% endif %}
-  <!--  -->
+<div class="left">
+  <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
 </div>
+<div class="center">
+  <div class="pop-up">
+    <!--  -->
+    {% if (groups is defined) and groups %}
+    <!--  -->
+    {% for group in groups %}
+    <div class="group-badge">
+      <a href="/user/{{ user.id }}/group/{{ group.id }}">
+        <h3>{{ group.name}}</h3>
+        <h4>_ members</h4>
+        <p>{{ group.description }}</p>
+      </a>
+    </div>
+
+    {% endfor %}
+    <!--  -->
+    {% else %}
+    <h1>No available groups</h1>
+    {% endif %}
+    <!--  -->
+  </div>
+</div>
+<div class="right"></div>
+
 {% endblock %}

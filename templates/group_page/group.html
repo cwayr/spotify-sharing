@@ -5,6 +5,26 @@
 {% endblock %}
 <!--  -->
 {% block morecontent %}
-<a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
-<h1 class="group-title">{{ group.name }}</h1>
+<div class="left">
+  <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
+  {% if user_in_group%}
+  <form
+    class="group-actions-form"
+    method="DELETE"
+    action="/user/{{ user.id }}/group/{{ group.id }}/leave"
+  >
+    <button type="submit" class="leave-btn">Leave group</button>
+  </form>
+  {% else %}
+  <form
+    class="group-actions-form"
+    method="POST"
+    action="/user/{{ user.id }}/group/{{ group.id }}/join"
+  >
+    <button type="submit" class="join-btn">Join group</button>
+  </form>
+  {% endif %}
+</div>
+<div class="center"><h1 class="group-title">{{ group.name }}</h1></div>
+<div class="right"></div>
 {% endblock %}
