@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect
 from flask_login import login_required
 from models import db, User, Group, UserGroup
-from forms import NewGroupForm
+from forms import GroupForm
 
 user_routes = Blueprint("user_routes", __name__, static_folder="../static", template_folder="../templates/user_page")
 
@@ -30,7 +30,7 @@ def create_new_group(user_id):
     """Create a new group."""
 
     user = User.query.get(user_id)
-    form = NewGroupForm()
+    form = GroupForm()
 
     if form.validate_on_submit():
         name = form.name.data

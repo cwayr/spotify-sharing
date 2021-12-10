@@ -17,7 +17,7 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField('Confirm password', validators=[DataRequired(), EqualTo('password', message="Passwords must match.")], description="confirm password")
 
 
-class NewGroupForm(FlaskForm):
+class GroupForm(FlaskForm):
 
     name = StringField("Title", validators=[DataRequired()], description="name")
     description = TextAreaField("Description", description="description")

@@ -17,3 +17,9 @@
   background: #f77777;
   color: #fff;
 }
+
+.edit-btn {
+  position: relative;
+  background: #4278a3;
+  color: #fff;
+}
