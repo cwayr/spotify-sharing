@@ -23,3 +23,9 @@
   background: #4278a3;
   color: #fff;
 }
+
+.delete-btn {
+  position: relative;
+  background: #c74545;
+  color: #fff;
+}
