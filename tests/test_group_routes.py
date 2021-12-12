@@ -89,11 +89,11 @@ class TestGroupRoutes(TestCase):
             self.assertIn('Leave group', html)
 
             # check db
-            user3_in_group = UserGroup.query.filter_by(user_id=3).all()
-            user_group_len = UserGroup.query.filter_by(group_id=1).all()
+            user3_in_group = UserGroup.query.filter_by(user_id=3).count()
+            user_group_len = UserGroup.query.filter_by(group_id=1).count()
 
-            self.assertEqual(len(user3_in_group), 1)
-            self.assertEqual(len(user_group_len), 2)
+            self.assertEqual(user3_in_group, 1)
+            self.assertEqual(user_group_len, 2)
 
 
     def test_leave_group(self):
@@ -116,14 +116,14 @@ class TestGroupRoutes(TestCase):
 
             # check db
             client.post('/user/3/group/1/join')
-            user3_in_group = UserGroup.query.filter_by(user_id=3).all()
+            user3_in_group = UserGroup.query.filter_by(user_id=3).count()
 
-            self.assertEqual(len(user3_in_group), 1)
+            self.assertEqual(user3_in_group, 1)
 
             client.delete('/user/3/group/1/leave')
-            user3_not_in_group = UserGroup.query.filter_by(user_id=3).all()
+            user3_not_in_group = UserGroup.query.filter_by(user_id=3).count()
 
-            self.assertEqual(len(user3_not_in_group), 0)
+            self.assertEqual(user3_not_in_group, 0)
 
 
     def test_edit_group(self):
@@ -148,3 +148,19 @@ class TestGroupRoutes(TestCase):
 
             self.assertEqual(group.name, 'Test Group Edited')
             self.assertEqual(group.description, "It really is for testing!")
+
+
+    def test_delete_group(self):
+        """Test deleting a group works."""
+
+        with app.test_client() as client:
+            # follow_redirects=true
+            redirect_resp = client.delete('/user/1/group/1/delete', follow_redirects=True)
+            html = redirect_resp.get_data(as_text=True)
+
+            self.assertEqual(redirect_resp.status_code, 200)
+            self.assertIn("Browse groups", html)
+
+            # check db
+            group = Group.query.filter_by(id=1).first()
+            self.assertEqual(group, None)

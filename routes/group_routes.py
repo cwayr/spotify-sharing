@@ -61,3 +61,15 @@ def edit_group(user_id, group_id):
         return redirect(f"/user/{user_id}/group/{group_id}")
 
     return render_template("edit-group.html", user=user, group=group, form=form)
+
+
+@group_routes.route("/user/<int:user_id>/group/<int:group_id>/delete", methods=["GET", "DELETE"])
+@login_required
+def delete_group(user_id, group_id):
+    """Delete group."""
+
+    group = Group.query.get(group_id)
+    db.session.delete(group)
+    db.session.commit()
+
+    return redirect(f"/user/{user_id}")

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from sqlalchemy.orm import backref
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -48,6 +49,16 @@ class User(db.Model):
             return False
 
 
+class UserGroup(db.Model):
+    """Maps users to their groups."""
+
+    __tablename__ = 'users_groups'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE'))
+
+
 class Group(db.Model):
     """Group page."""
 
@@ -56,17 +67,9 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
-    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
 
-
-class UserGroup(db.Model):
-    """Maps users to their groups."""
-
-    __tablename__ = 'user_groups'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    user = db.relationship('User', backref=backref('groups', cascade='all, delete-orphan'))
 
 
 class Post(db.Model):
@@ -75,12 +78,12 @@ class Post(db.Model):
     __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE'))
     content = db.Column(db.String)
     spotify_id = db.Column(db.String)
     is_reply = db.Column(db.Boolean, default=False)
-    reply_to = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    reply_to = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
 
 
 def connect_db(app):

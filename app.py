@@ -19,6 +19,7 @@ else:
     app.config.from_object('config.DevelopmentConfig')
 
 connect_db(app)
+db.drop_all()
 db.create_all()
 
 app.register_blueprint(landing_routes)
