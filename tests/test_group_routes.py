@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import db, User, Group, UserGroup
+from models import db, User, Group, UserGroup, Post
 from app import app
 
 app.config.from_object('config.TestingConfig')
@@ -51,7 +51,7 @@ class TestGroupRoutes(TestCase):
             self.assertNotIn("Test Group", html2)
 
 
-    def test_group_page(self):
+    def test_group_view(self):
         """Test group page displays correctly."""
 
         with app.test_client() as client:
@@ -164,3 +164,29 @@ class TestGroupRoutes(TestCase):
             # check db
             group = Group.query.filter_by(id=1).first()
             self.assertEqual(group, None)
+
+
+    def test_post_in_group(self):
+        """Test posting in a group works."""
+
+        with app.test_client() as client:
+
+            client.post('/user/2/group/1/join')
+            # follow_redirects=false
+            resp = client.post('/user/2/group/1', data = {'content': 'This is a test post!'})
+
+            self.assertEqual(resp.status_code, 302)
+
+            # follow_redirects=true
+            redirect_resp = client.post('/user/2/group/1', data = {'content': 'This is a test post!'}, follow_redirects=True)
+            html = redirect_resp.get_data(as_text=True)
+
+            self.assertEqual(redirect_resp.status_code, 200)
+            self.assertIn('testuserjr', html)
+            self.assertIn('This is a test post!', html)
+
+            # check db
+            post = Post.query.filter_by(id=1).first()
+
+            self.assertEqual(post.content, 'This is a test post!')
+            self.assertEqual(post.user_id, 2)

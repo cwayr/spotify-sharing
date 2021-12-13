@@ -21,3 +21,8 @@ class GroupForm(FlaskForm):
 
     name = StringField("Title", validators=[DataRequired()], description="name")
     description = TextAreaField("Description", description="description")
+
+
+class PostForm(FlaskForm):
+
+    content = TextAreaField("Content", description="content")

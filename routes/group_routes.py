@@ -1,23 +1,34 @@
 from flask import Blueprint, render_template, redirect
 from flask_login.utils import login_required
-from forms import GroupForm
-from models import db, User, Group, UserGroup
+from forms import PostForm, GroupForm
+from models import db, User, Group, UserGroup, Post
 
 group_routes = Blueprint("group_routes", __name__, static_folder="../static", template_folder="../templates/group_page")
 
 
-@group_routes.route("/user/<int:user_id>/group/<int:group_id>")
+@group_routes.route("/user/<int:user_id>/group/<int:group_id>", methods=["GET", "POST"])
 @login_required
 def group_page(user_id, group_id):
     """Display group page."""
 
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
+    user_in_group = UserGroup.query.filter(UserGroup.user_id == user_id, UserGroup.group_id == group_id).first() # determine if user is in group (but not admin). Used to choose which action buttons to display.
 
-    user_in_group = UserGroup.query.filter(UserGroup.user_id == user_id, UserGroup.group_id == group_id).first()
-    print('user_in_group: ', user_in_group)
+    posts = Post.query.filter(Post.group_id == group_id).all()
 
-    return render_template("group.html", user=user, group=group, user_in_group=user_in_group)
+    form = PostForm()
+
+    if form.validate_on_submit():
+        content = form.content.data
+
+        newPost = Post(content=content, user_id=user_id, group_id=group_id)
+        db.session.add(newPost)
+        db.session.commit()
+
+        return redirect(f"/user/{user_id}/group/{group_id}")
+
+    return render_template("group.html", user=user, group=group, user_in_group=user_in_group, posts=posts, form=form)
 
 
 @group_routes.route("/user/<int:user_id>/group/<int:group_id>/join", methods=["POST"])
