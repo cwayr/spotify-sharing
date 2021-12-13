@@ -80,7 +80,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE'))
-    content = db.Column(db.String)
+    content = db.Column(db.String, nullable=False)
     spotify_id = db.Column(db.String)
     is_reply = db.Column(db.Boolean, default=False)
     reply_to = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
