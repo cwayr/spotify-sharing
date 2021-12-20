@@ -8,6 +8,7 @@ class Config(object):
     SECRET_KEY = os.getenv("SECRET") or 'secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'postgresql:///spotify_sharing'
+    SESSION_TYPE = 'filesystem'
 
 
 class DevelopmentConfig(Config):
@@ -35,6 +36,7 @@ class ProductionConfig(Config):
     DEBUG = False
     DATABASE_URL = os.environ.get('DATABASE_URL')
     ENV = 'production'
+
 
 app_config = {
     'DEFAULT': DevelopmentConfig,

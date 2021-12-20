@@ -1,3 +1,4 @@
+
 {% extends 'header.html' %}
 <!-- -->
 {% block morestyle%}
@@ -6,7 +7,7 @@
 <!--  -->
 {% block morecontent %}
 <div class="left">
-  <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
+  <a href="/user/{{ user.id }}/group/{{ group.id }}"><button class="back-btn">Back</button></a>
   {% if group.admin_id != user.id %} {% if user_in_group %}
   <!-- non-admin buttons -->
   <form
@@ -63,15 +64,19 @@
         <form method="POST" novalidate="True" id="post-form">
           {{ form.hidden_tag() }}
           <!--  -->
-            {{ form.content }}
+          {{ form.content }}
           <!--  -->
         </form>
       </div>
       <div class="feed-post-creation-btns">
+        <form action="/user/{{ user.id }}/group/{{ group.id }}/search_spotify">
+          <button type="submit" class="spotify-btn" onclick="{{ session.pop('track_results', None) }}">Search Spotify</button>
+        </form>
         <button form="post-form" type="submit" class="post-btn">Post</button>
       </div>
     </div>
   </div>
+{% block spotify %} {% endblock %}
 </div>
 <div class="right"></div>
 {% block script %} 
