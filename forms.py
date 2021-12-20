@@ -26,3 +26,8 @@ class GroupForm(FlaskForm):
 class PostForm(FlaskForm):
 
     content = TextAreaField("Content", description="content")
+
+
+class SpotifySearchForm(FlaskForm):
+
+    query = StringField('Query', validators=[DataRequired()], description="search for songs")

@@ -41,6 +41,14 @@
   width: 80%;
 }
 
+.spotify-btn {
+  background: #1db954;
+  color: #fff;
+  position: relative;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
 .btn-disabled {
   background-color: #7180a0;
   cursor: default;
@@ -64,16 +72,20 @@
   position: relative;
   box-sizing: border-box;
   background-color: #fff;
-  height: 90%;
+  height: 85vh;
   padding-top: 70px;
   margin-top: -50px;
-  border-radius: 6px;
+  border-radius: 7px;
   overflow-x: hidden;
   word-wrap: normal;
   overflow-y: scroll;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
   scrollbar-width: none; /* for Firefox */
   z-index: 0;
+}
+
+.group-feed::-webkit-scrollbar {
+  display: none;
 }
 
 /* feed portion where posts and comments will display */
@@ -95,7 +107,7 @@
   position: sticky;
   bottom: 0;
   grid-row: 2 / 3;
-  height: 100%;
+  height: 110px;
   width: 100%;
   margin: auto;
   padding: 10px;
@@ -142,7 +154,103 @@
   padding-left: 5px;
 }
 
-/* hide scrollbar */
-.group-feed::-webkit-scrollbar {
+.modal-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+}
+
+/* spotify search */
+.spotify-search-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80%;
+  width: 50%;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* .spotify-search-input {
+  position: sticky;
+} */
+
+#spotify-search-form {
+  position: sticky;
+  display: grid;
+  grid-template-columns: 75% 1fr;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+#spotify-search-form input {
+  grid-column: 1 / 2;
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  height: 50px;
+  width: 100%;
+  border: 0;
+  margin: 0;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+#spotify-search-form button {
+  grid-column: 2 / 3;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.spotify-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: calc(100% - 50px);
+  margin-top: 15px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
+
+.spotify-search-results::-webkit-scrollbar {
   display: none;
+}
+
+.spotify-search-res {
+  display: grid;
+  grid-template-columns: 80px 1fr 200px;
+  width: 100%;
+}
+
+.song-info {
+  grid-template-columns: 2 / 3;
+}
+
+.spotify-search-res img {
+  grid-template-columns: 1 / 2;
+  width: 100%;
+  border-radius: 6px;
+}
+
+.spotify-search-res h3 {
+  font-weight: 100;
+  margin: 10px;
+}
+
+.spotify-search-res h4 {
+  font-size: 14px;
+  margin: 10px;
 }

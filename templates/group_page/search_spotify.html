@@ -1,0 +1,50 @@
+{% extends 'group.html' %} {% block spotify %}
+<div class="modal-bg">
+  <a href="/user/{{ user.id }}/group/{{ group.id }}"
+    ><button class="back-btn">Close</button></a
+  >
+</div>
+<div class="spotify-search-modal">
+  <form method="POST" novalidate="True" id="spotify-search-form">
+    {{ form.hidden_tag() }}
+    <!--  -->
+    {{ form.query(placeholder="Search for songs") }}
+    <!--  -->
+    <button type="submit" class="post-btn">Search</button>
+  </form>
+  <div class="spotify-search-results">
+    {% for track in tracks %}
+    <div class="spotify-search-res">
+      <a
+        href="{{ track['album']['external_urls']['spotify'] }}"
+        target="_blank"
+      >
+        <img
+          src="{{ track['album']['images'][1]['url'] }}"
+          alt="{{ track['album']['name'] }} album image"
+        />
+      </a>
+      <div class="song-info">
+        <h3>
+          <a href="{{ track['external_urls']['spotify'] }}" target="_blank"
+            >{{ track['name'] }}</a
+          >
+          {% if track['preview_url'] %}<a
+            href="{{ track['preview_url'] }}"
+            target="_blank"
+            ><i class="far fa-play-circle"></i></a
+          >{% endif %}
+        </h3>
+        <h4>
+          <a
+            href="{{ track['artists'][0]['external_urls']['spotify'] }}"
+            target="_blank"
+            >{{ track['artists'][0]['name'] }}</a
+          >
+        </h4>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

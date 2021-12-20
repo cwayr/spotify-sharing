@@ -71,6 +71,8 @@ class TestGroupRoutes(TestCase):
 
             self.assertIn("Edit group", html)
 
+    # test_create_group located in 'test_user_routes' because it is a functionality used from the user home page.
+
 
     def test_join_group(self):
         """Test joining a group works."""
@@ -190,3 +192,51 @@ class TestGroupRoutes(TestCase):
 
             self.assertEqual(post.content, 'This is a test post!')
             self.assertEqual(post.user_id, 2)
+
+
+
+class TestSpotifyAPI(TestCase):
+    """Testing spotify routes."""
+
+    def setUp(self):
+        self.client = app.test_client()
+        db.drop_all()
+        db.create_all()
+
+        # create test user
+        self.test_user = User(full_name='Test User', username='testuser', password='password')
+        db.session.add(self.test_user)
+        db.session.commit()
+
+        # create test group (user 1 admin)
+        self.test_group = Group(name='Test Group', description='A group for testing', admin_id=1)
+        db.session.add(self.test_group)
+        db.session.commit()
+
+
+    def tearDown(self):
+        db.session.rollback()
+        return super().tearDown()
+
+
+    def test_search_spotify_route(self):
+        """Test search-spotify modal works."""
+
+        with app.test_client() as client:
+            resp = client.get('/user/1/group/1/search_spotify')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Search for songs", html)
+
+
+    def test_spotify_api(self):
+        """Test search of the spotify api."""
+
+        with app.test_client() as client:
+            resp = client.post('/user/1/group/1/search_spotify', data={'query': 'time'})
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("time", html)
+            self.assertIn('<div class="spotify-search-res">', html)
