@@ -57,7 +57,7 @@ def post(user_id, group_id):
         db.session.add(newPost)
         db.session.commit()
         clear_session()
-    
+
         return redirect(f"/user/{user_id}/group/{group_id}")
 
 
