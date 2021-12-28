@@ -174,13 +174,15 @@ class TestGroupRoutes(TestCase):
         with app.test_client() as client:
 
             client.post('/user/2/group/1/join')
+
+        # post without song
             # follow_redirects=false
-            resp = client.post('/user/2/group/1', data = {'content': 'This is a test post!'})
+            resp = client.post('/user/2/group/1/post', data = {'content': 'This is a test post!'})
 
             self.assertEqual(resp.status_code, 302)
 
             # follow_redirects=true
-            redirect_resp = client.post('/user/2/group/1', data = {'content': 'This is a test post!'}, follow_redirects=True)
+            redirect_resp = client.post('/user/2/group/1/post', data = {'content': 'This is a test post!'}, follow_redirects=True)
             html = redirect_resp.get_data(as_text=True)
 
             self.assertEqual(redirect_resp.status_code, 200)
@@ -193,6 +195,37 @@ class TestGroupRoutes(TestCase):
             self.assertEqual(post.content, 'This is a test post!')
             self.assertEqual(post.user_id, 2)
 
+
+    def test_post_song_in_group(self):
+        """Test posting a song in a group works."""
+
+        with app.test_client() as client:
+            with app.test_request_context():
+                with client.session_transaction() as sess:
+                    sess['track_image'] = 'song_image'
+                    sess['track_name'] = 'song_name'
+                    sess['track_artist'] = 'song_artist'
+                    sess['track_link'] = 'song_link'
+                    sess['track_preview'] = 'song_preview'
+
+                # follow_redirects=true
+                song_resp = client.post('/user/2/group/1/post', data = {'content': 'Check out this one!'})
+                song_html = song_resp.get_data(as_text=True)
+
+                self.assertEqual(song_resp.status_code, 200)
+                self.assertIn('testuserjr', song_html)
+                self.assertIn('song_image', song_html)
+
+                # check db
+                song_post = Post.query.filter_by(content='Check out this one!').first()
+
+                self.assertEqual(song_post.s_image, 'song_image')
+                self.assertEqual(song_post.s_name, 'song_name')
+                self.assertEqual(song_post.s_artist, 'song_artist')
+                self.assertEqual(song_post.s_link, 'song_link')
+                self.assertEqual(song_post.s_preview, 'song_preview')
+
+            yield client
 
 
 class TestSpotifyAPI(TestCase):

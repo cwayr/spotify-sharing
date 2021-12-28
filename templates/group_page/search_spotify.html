@@ -6,11 +6,13 @@
 </div>
 <div class="spotify-search-modal">
   <form method="POST" novalidate="True" id="spotify-search-form">
-    {{ form.hidden_tag() }}
+    {{ search_form.hidden_tag() }}
     <!--  -->
-    {{ form.query(placeholder="Search for songs") }}
+    {{ search_form.query(placeholder="Search for songs") }}
     <!--  -->
-    <button type="submit" class="post-btn">Search</button>
+    <button type="submit" class="post-btn" name="btn" value="search">
+      Search
+    </button>
   </form>
   <div class="spotify-search-results">
     {% for track in tracks %}
@@ -43,6 +45,37 @@
           >
         </h4>
       </div>
+      <form
+        action="/user/{{ user.id }}/group/{{ group.id }}/search_spotify"
+        method="POST"
+        novalidate="True"
+        id="select-song-form"
+      >
+        <input
+          type="hidden"
+          name="track_image"
+          value="{{ track['album']['images'][1]['url'] }}"
+        />
+        <input type="hidden" name="track_name" value="{{ track['name'] }}" />
+        <input
+          type="hidden"
+          name="track_artist"
+          value="{{ track['artists'][0]['name'] }}"
+        />
+        <input
+          type="hidden"
+          name="track_link"
+          value="{{ track['external_urls']['spotify'] }}"
+        />
+        <input
+          type="hidden"
+          name="track_preview"
+          value="{{ track['preview_url'] }}"
+        />
+        <button type="submit" class="select-btn" name="btn" value="select">
+          Select
+        </button>
+      </form>
     </div>
     {% endfor %}
   </div>

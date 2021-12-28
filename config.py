@@ -28,6 +28,8 @@ class TestingConfig(Config):
     ENV = 'testing'
     LOGIN_DISABLED = True # https://flask-login.readthedocs.io/en/latest/
     WTF_CSRF_ENABLED = False
+    SESSION_COOKIE_DOMAIN = None
+    PRESERVE_CONTEXT_ON_EXCEPTION = False # https://github.com/jarus/flask-testing/issues/21
 
 
 class ProductionConfig(Config):

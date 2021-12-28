@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect
 from flask_login import login_user, logout_user
 from forms import LoginForm, RegisterForm
 from models import db, User
+from helpers import clear_session
 
 landing_routes = Blueprint("landing_routes", __name__, static_folder="../static", template_folder="../templates/landing_page")
 
@@ -59,5 +60,6 @@ def logout():
     """Handle logout."""
 
     logout_user()
+    clear_session() # removes post draft data
 
     return redirect("/login")
