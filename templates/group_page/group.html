@@ -1,4 +1,3 @@
-
 {% extends 'header.html' %}
 <!-- -->
 {% block morestyle%}
@@ -7,7 +6,7 @@
 <!--  -->
 {% block morecontent %}
 <div class="left">
-  <a href="/user/{{ user.id }}/group/{{ group.id }}"><button class="back-btn">Back</button></a>
+  <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
   {% if group.admin_id != user.id %} {% if user_in_group %}
   <!-- non-admin buttons -->
   <form
@@ -52,34 +51,90 @@
     <div class="feed">
       {% for post in posts %}
       <div class="post">
-        <p>
-          <h4>{{ user.username }}</h4>
-          <p>{{ post.content }} </p>
-        </p>
+        <h4>{{ post.user.username }}</h4>
+        <br />
+        <p>{{ post.content }}</p>
+        {% if post.s_name %}
+        <img
+          src="{{ post.s_image }}"
+          alt="{{ session['track_name'] }} album image"
+        />
+        <h5>
+          {{ post.s_name }}
+          <div class="artist">{{ post.s_artist }}</div>
+          <div class="links">
+            <span
+              ><a href="{{ post.s_preview }}" target="_blank"
+                >Preview &nbsp;<i class="far fa-play-circle"></i></a
+            ></span>
+            |
+            <span
+              ><a href="{{ post.s_link }}" target="_blank"
+                >View on Spotify</a
+              ></span
+            >
+          </div>
+        </h5>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
     <div class="feed-post-creation">
       <div class="feed-post-creation-input">
-        <form method="POST" novalidate="True" id="post-form">
-          {{ form.hidden_tag() }}
+        <form
+          action="/user/{{ user.id }}/group/{{ group.id }}/post"
+          method="POST"
+          novalidate="True"
+          id="post-form"
+        >
+          {{ post_form.hidden_tag() }}
           <!--  -->
-          {{ form.content }}
+          {{ post_form.content }}
           <!--  -->
         </form>
       </div>
+      <div class="feed-post-creation-spotify">
+        {% if session['track_name'] %}
+        <div class="delete-img">
+          <form
+            action="/user/{{ user.id }}/group/{{ group.id }}"
+            method="POST"
+            novalidate="True"
+          >
+            <button type="submit" name="btn" value="delete">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </form>
+        </div>
+        <img
+          id="selected-track-img"
+          src="{{ session['track_image'] }}"
+          alt="{{ session['track_title'] }} album image"
+        />
+        {% endif %}
+      </div>
       <div class="feed-post-creation-btns">
         <form action="/user/{{ user.id }}/group/{{ group.id }}/search_spotify">
-          <button type="submit" class="spotify-btn" onclick="{{ session.pop('track_results', None) }}">Search Spotify</button>
+          <button
+            type="submit"
+            class="spotify-btn"
+            onclick="{{ session.pop('track_results', None) }}"
+          >
+            Search Spotify
+          </button>
         </form>
         <button form="post-form" type="submit" class="post-btn">Post</button>
       </div>
     </div>
   </div>
-{% block spotify %} {% endblock %}
+  {% block spotify %} {% endblock %}
 </div>
 <div class="right"></div>
-{% block script %} 
-  <script src="/static/group.js"></script>
-{% endblock %}
-{% endblock %}
+{% block script %}
+<script src="/static/group.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"
+></script>
+{% endblock %} {% endblock %}

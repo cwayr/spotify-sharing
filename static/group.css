@@ -69,18 +69,15 @@
 .group-feed {
   display: grid;
   grid-template-rows: 5fr 1fr;
-  position: relative;
   box-sizing: border-box;
   background-color: #fff;
   height: 85vh;
   padding-top: 70px;
   margin-top: -50px;
   border-radius: 7px;
+  overflow-y: scroll;
   overflow-x: hidden;
   word-wrap: normal;
-  overflow-y: scroll;
-  -ms-overflow-style: none; /* for Internet Explorer, Edge */
-  scrollbar-width: none; /* for Firefox */
   z-index: 0;
 }
 
@@ -90,12 +87,13 @@
 
 /* feed portion where posts and comments will display */
 .feed {
-  grid-row: 1 / 2;
-  position: absolute;
-  bottom: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  grid-row: 1 / 2;
+  height: 100%;
+  width: 100%;
+  bottom: 10px;
   gap: 10px;
   padding: 10px;
 }
@@ -103,13 +101,14 @@
 /* input section for text area and buttons */
 .feed-post-creation {
   display: grid;
-  grid-template-columns: 70% 15% 15%;
+  grid-template-columns: 65% 15% 20%;
   position: sticky;
   bottom: 0;
   grid-row: 2 / 3;
   height: 110px;
   width: 100%;
   margin: auto;
+  margin-top: 10px;
   padding: 10px;
   border-radius: 6px;
 }
@@ -125,33 +124,81 @@
   resize: none;
   font-size: 16px;
   font-family: "Roboto", sans-serif;
-  padding: 10px;
+  padding: 15px;
   border-radius: 6px;
 }
 
-.feed-post-creation-btns {
-  grid-column: 3 / 4;
-  padding: 10px;
+.feed-post-creation-spotify img {
+  grid-template-columns: 2 / 3;
+  width: 88%;
+  border-radius: 6px;
+}
+
+.feed-post-creation-spotify .delete-img {
+  position: absolute;
+  text-align: center;
+  outline: 1px solid rgb(197, 0, 0);
+  border-radius: 10%;
+  z-index: 2;
 }
 
 .feed-post-creation button {
   grid-column: 2 / 3;
 }
 
+.post {
+  display: grid;
+  grid-template-columns: 55% 30% 12% 3%;
+  grid-template-rows: 30px 1fr;
+  width: 100%;
+}
+
 .post h4 {
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
   font-size: 0.9em;
   margin-top: 0;
   margin-bottom: 0;
-  background-color: rgb(231, 232, 240);
+  background-color: rgb(238, 240, 245);
   padding: 5px;
-  width: 100%;
+  width: 98%;
   border-radius: 4px;
 }
 
 .post p {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
   font-size: 1em;
   margin: 2px 0 8px 0;
   padding-left: 5px;
+}
+
+.post img {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+  margin-top: 6px;
+  width: 100%;
+  min-width: 50px;
+  border-radius: 6px;
+}
+
+.post h5 {
+  font-size: 1em;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  text-align: right;
+  margin: 6px 10px 5px 0;
+  line-height: 1.4em;
+}
+
+.post h5 .artist {
+  font-size: 0.9em;
+  font-weight: 100;
+}
+
+.post h5 .links span {
+  font-size: 0.75em;
+  font-style: italic;
 }
 
 .modal-bg {
@@ -231,7 +278,7 @@
 
 .spotify-search-res {
   display: grid;
-  grid-template-columns: 80px 1fr 200px;
+  grid-template-columns: 80px 1fr 100px;
   width: 100%;
 }
 
@@ -253,4 +300,20 @@
 .spotify-search-res h4 {
   font-size: 14px;
   margin: 10px;
+}
+
+.select-btn {
+  grid-template-columns: 2 / 3;
+  border: 1px solid #3d5588;
+  height: 40px;
+  width: 80px;
+}
+
+.select-btn:hover {
+  background-color: #3d5588;
+  color: #fff;
+}
+
+.selected {
+  border: 3px solid #1db954;
 }

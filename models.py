@@ -81,9 +81,15 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE'))
     content = db.Column(db.String, nullable=False)
-    spotify_id = db.Column(db.String)
+    s_image = db.Column(db.String)
+    s_name = db.Column(db.String)
+    s_artist = db.Column(db.String)
+    s_link = db.Column(db.String)
+    s_preview = db.Column(db.String)
     is_reply = db.Column(db.Boolean, default=False)
     reply_to = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
+
+    user = db.relationship('User', backref=backref('posts', cascade='all, delete-orphan'))
 
 
 def connect_db(app):
