@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Mulish", sans-serif;
   margin: 0;
   padding: 0;
   background: rgb(182, 195, 211);
@@ -19,6 +19,8 @@ a {
   text-decoration: none;
 }
 
+/* BUTTONS */
+
 button {
   font-family: "Roboto", sans-serif;
   cursor: pointer;
@@ -31,6 +33,50 @@ button {
 .back-btn {
   position: relative;
   margin: 20px 10px 0 15px;
+}
+
+.join-btn {
+  position: relative;
+  background: #94b0da;
+  color: #fff;
+}
+
+.leave-btn {
+  position: relative;
+  background: #f77777;
+  color: #fff;
+}
+
+.edit-btn {
+  position: relative;
+  background: #4278a3;
+  color: #fff;
+}
+
+.delete-btn {
+  position: relative;
+  background: #c74545;
+  color: #fff;
+}
+
+.post-btn {
+  background: #3d5588;
+  color: #fff;
+  position: relative;
+  width: 80%;
+}
+
+.spotify-btn {
+  background: #1db954;
+  color: #fff;
+  position: relative;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.btn-disabled {
+  background-color: #7180a0;
+  cursor: default;
 }
 
 /**** FORMS ****/

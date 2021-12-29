@@ -10,50 +10,6 @@
   display: inline;
 }
 
-.join-btn {
-  position: relative;
-  background: #94b0da;
-  color: #fff;
-}
-
-.leave-btn {
-  position: relative;
-  background: #f77777;
-  color: #fff;
-}
-
-.edit-btn {
-  position: relative;
-  background: #4278a3;
-  color: #fff;
-}
-
-.delete-btn {
-  position: relative;
-  background: #c74545;
-  color: #fff;
-}
-
-.post-btn {
-  background: #3d5588;
-  color: #fff;
-  position: relative;
-  width: 80%;
-}
-
-.spotify-btn {
-  background: #1db954;
-  color: #fff;
-  position: relative;
-  width: 80%;
-  margin-bottom: 10px;
-}
-
-.btn-disabled {
-  background-color: #7180a0;
-  cursor: default;
-}
-
 .group-header h1 {
   position: relative;
   color: #fff;

@@ -15,6 +15,7 @@ class User(db.Model):
     full_name = db.Column(db.String, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
+    introduction = db.Column(db.String(250))
 
     # the four following properties are for flask-login
     def is_authenticated(self):

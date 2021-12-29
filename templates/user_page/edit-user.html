@@ -1,0 +1,23 @@
+{% extends 'header.html' %}
+<!-- -->
+{% block morecontent %}
+<a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
+<div class="edit-user">
+  <form class="form" method="POST" novalidate="True">
+    <h2>Edit user</h2>
+    {{ form.hidden_tag() }}
+    <!--  -->
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <!--  -->
+    {{ field(placeholder=field.description) }}
+    <!--  -->
+    {% for error in form.errors %}
+    <p class="error-message">{{ error }}</p>
+    {% endfor %}
+    <br />
+    {% endfor %}
+    <!--  -->
+    <button type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}
