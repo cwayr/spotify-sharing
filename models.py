@@ -90,6 +90,19 @@ class Post(db.Model):
     reply_to = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
 
     user = db.relationship('User', backref=backref('posts', cascade='all, delete-orphan'))
+    likes = db.relationship('Likes', backref=backref('posts', single_parent=True))
+
+
+class Likes(db.Model):
+    """User likes."""
+
+    __tablename__ = 'likes'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+
+    __tableargs__ = (db.UniqueConstraint('user_id', 'post_id', name='_user_post_uc')) #https://stackoverflow.com/questions/10059345/sqlalchemy-unique-across-multiple-columns
 
 
 def connect_db(app):

@@ -3,7 +3,7 @@ from flask_login.utils import login_required
 import requests
 from urllib.parse import urlencode
 from forms import PostForm, GroupForm, SpotifySearchForm
-from models import db, User, Group, UserGroup, Post
+from models import db, User, Group, UserGroup, Post, Likes
 from spotify_api_auth import SpotifyAPI
 from api_keys import CLIENT_ID, CLIENT_SECRET
 from helpers import clear_session
@@ -59,6 +59,37 @@ def post(user_id, group_id):
         clear_session()
 
         return redirect(f"/user/{user_id}/group/{group_id}")
+
+
+@group_routes.route("/user/<int:user_id>/group/<int:group_id>/<int:post_id>/like", methods=["POST"])
+@login_required
+def like(user_id, group_id, post_id):
+    """Like a post."""
+
+    user = User.query.get(user_id)
+    post = Post.query.get(post_id)
+
+    add_like = Likes(user_id=user.id, post_id=post.id)
+    db.session.add(add_like)
+    db.session.commit()
+
+    return redirect(f"/user/{user_id}/group/{group_id}")
+
+
+@group_routes.route("/user/<int:user_id>/group/<int:group_id>/<int:post_id>/unlike", methods=["GET", "DELETE"])
+@login_required
+def unlike(user_id, group_id, post_id):
+    """Unlike a post."""
+
+    user = User.query.get(user_id)
+    post = Post.query.get(post_id)
+
+    post_like = Likes.query.filter(Likes.user_id == user.id, Likes.post_id == post.id).all()
+    for like in post_like:
+        db.session.delete(like)
+        db.session.commit()
+
+    return redirect(f"/user/{user_id}/group/{group_id}")
 
 
 @group_routes.route("/user/<int:user_id>/group/<int:group_id>/join", methods=["POST"])

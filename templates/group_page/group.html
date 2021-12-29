@@ -51,7 +51,39 @@
     <div class="feed">
       {% for post in posts %}
       <div class="post">
-        <h4>{{ post.user.username }}</h4>
+        <h4>
+          {{ post.user.username }}
+          <span class="likes">
+            <!-- if post is not logged-in-user's post -->
+            {% if post.user.id != user.id %}
+            <!-- if post is not liked by logged-in-user -->
+            {% if user.id not in post.likes|map(attribute="user_id") %}
+            <form
+              action="/user/{{ user.id }}/group/{{ group.id }}/{{ post.id }}/like"
+              method="POST"
+            >
+              <button class="like-btn" type="submit">
+                <i class="far fa-heart"></i>
+              </button>
+            </form>
+            <!-- if post is liked by logged-in-user -->
+            {% else %}
+            <form
+              action="/user/{{ user.id }}/group/{{ group.id }}/{{ post.id }}/unlike"
+              method="DELETE"
+            >
+              <button class="like-btn" type="submit">
+                <i class="fas fa-heart"></i>
+              </button>
+            </form>
+            {% endif %}
+          </span>
+          <span class="likes-count"
+            >{% endif %} {% if post.likes|length == 1 %}1 like{% elif
+            post.likes|length > 1%}{{ post.likes|length }} likes{% endif
+            %}</span
+          >
+        </h4>
         <br />
         <p>{{ post.content }}</p>
         {% if post.s_name %}
