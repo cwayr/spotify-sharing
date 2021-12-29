@@ -8,6 +8,16 @@
 <div class="user-details">
   <h1>{{ user.full_name }}</h1>
   <h3>@{{ user.username }}</h3>
+  {% if user.introduction %}
+  <p>{{ user.introduction }}</p>
+  {% endif %}
+  <p class="group-count">
+    {{ created_groups|length }}{% if created_groups|length == 1%} group{% else
+    %} groups{% endif %}
+  </p>
+  <a href="/user/{{ user.id }}/edit"
+    ><button class="edit-btn">Edit details</button></a
+  >
 </div>
 <div class="profile-content">
   <div class="groups">

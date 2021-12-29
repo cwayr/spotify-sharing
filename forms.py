@@ -31,3 +31,10 @@ class PostForm(FlaskForm):
 class SpotifySearchForm(FlaskForm):
 
     query = StringField('Query', validators=[DataRequired()], description="search for songs")
+
+
+class EditUserForm(FlaskForm):
+
+    full_name = StringField('Name', validators=[DataRequired()], description="name")
+    username = StringField('Username', validators=[DataRequired()], description="username")
+    introduction = TextAreaField('Introduction', description="introduction")
