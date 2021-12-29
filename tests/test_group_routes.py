@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import db, User, Group, UserGroup, Post
+from models import db, User, Group, UserGroup, Post, Likes
 from app import app
 
 app.config.from_object('config.TestingConfig')
@@ -226,6 +226,47 @@ class TestGroupRoutes(TestCase):
                 self.assertEqual(song_post.s_preview, 'song_preview')
 
             yield client
+
+
+    def test_likes(self):
+        """Test liking and unliking a post works."""
+
+        with app.test_client() as client:
+            # display like button
+            client.post('/user/2/group/1/join')
+            client.post('/user/2/group/1/post', data = {'content': 'Like this post'})
+
+            post_author_res = client.get('/user/2/group/1')
+            post_author_html = post_author_res.get_data(as_text=True)
+            post_viewer_res = client.get('/user/1/group/1')
+            post_viewer_html = post_viewer_res.get_data(as_text=True)
+
+            self.assertNotIn('fa-heart', post_author_html)
+            self.assertIn('far fa-heart', post_viewer_html)
+
+            # like post
+            post_id = Post.query.filter_by(content='Like this post').first().id
+            like_post_res = client.post(f'/user/1/group/1/{post_id}/like', follow_redirects=True)
+            like_post_html = like_post_res.get_data(as_text=True)
+
+            self.assertIn("1 like", like_post_html)
+            self.assertIn("fas fa-heart", like_post_html)
+
+            # (check db)
+            like = Likes.query.filter_by(id=1).first()
+            self.assertEqual(like.user_id, 1)
+            self.assertEqual(like.post_id, post_id)
+
+            # unlike post
+            unlike_post_res = client.delete(f'/user/1/group/1/{post_id}/unlike', follow_redirects=True)
+            unlike_post_html = unlike_post_res.get_data(as_text=True)
+
+            self.assertNotIn("1 like", unlike_post_html)
+            self.assertIn("far fa-heart", unlike_post_html)
+
+            # (check db)
+            again_like = Likes.query.filter_by(id=1).first()
+            self.assertEqual(again_like, None)
 
 
 class TestSpotifyAPI(TestCase):
