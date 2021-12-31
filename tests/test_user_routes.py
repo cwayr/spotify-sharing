@@ -21,8 +21,6 @@ class TestUserRoutes(TestCase):
         db.session.add(self.test_user2)
         db.session.commit()
 
-        print('user2:', self.test_user2)
-
     def tearDown(self):
         db.session.rollback()
         return super().tearDown()
@@ -78,6 +76,22 @@ class TestUserRoutes(TestCase):
             user = User.query.filter_by(id=2).first()
 
             self.assertEqual(user.introduction, "Imma test user")
+
+
+    def test_delete_user(self):
+        """Test that deleting a user works."""
+
+        with app.test_client() as client:
+            # follow_redirects=true
+            redirect_resp = client.delete('/user/2/delete', follow_redirects=True)
+            html = redirect_resp.get_data(as_text=True)
+
+            self.assertEqual(redirect_resp.status_code, 200)
+            self.assertIn("Sign up", html)
+
+            # check db
+            user = User.query.filter_by(id=2).first()
+            self.assertEqual(user, None)
 
 
     def test_create_new_group_route(self):

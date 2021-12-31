@@ -22,7 +22,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 connect_db(app)
-db.create_all()
+# db.drop_all()
+# db.create_all()
 
 app.register_blueprint(landing_routes)
 app.register_blueprint(user_routes)
@@ -32,3 +33,4 @@ app.register_blueprint(group_routes)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+    
