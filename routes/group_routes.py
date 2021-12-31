@@ -94,7 +94,7 @@ def unlike(user_id, group_id, post_id):
 
 @group_routes.route("/user/<int:user_id>/group/<int:group_id>/<int:post_id>/delete", methods=["GET", "DELETE"])
 @login_required
-def delete(user_id, group_id, post_id):
+def delete_post(user_id, group_id, post_id):
     """Delete a post."""
 
     post = Post.query.get(post_id)

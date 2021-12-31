@@ -45,6 +45,18 @@ def edit_user(user_id):
     return render_template("edit-user.html", form=form, user=user)
 
 
+@user_routes.route("/user/<int:user_id>/delete", methods=["GET", "DELETE"])
+@login_required
+def delete_user(user_id):
+    """Delete user."""
+
+    user = User.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect("/signup")
+
+
 @user_routes.route("/user/<int:user_id>/new-group", methods=["GET", "POST"])
 @login_required
 def create_new_group(user_id):

@@ -19,5 +19,13 @@
     <!--  -->
     <button type="submit">Save</button>
   </form>
+  <form
+    action="/user/{{ user.id }}/delete"
+    method="DELETE"
+    onSubmit="return confirm('Are you sure you wish to delete?');"
+    class="delete-user-form"
+  >
+    <button type="submit" class="delete-user-btn">Delete user</button>
+  </form>
 </div>
 {% endblock %}

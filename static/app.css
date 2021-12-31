@@ -24,7 +24,6 @@ a {
 button {
   font-family: "Roboto", sans-serif;
   cursor: pointer;
-  background-color: #fff;
   border: none;
   padding: 10px;
   border-radius: 4px;
@@ -88,6 +87,7 @@ button {
   max-width: 360px;
   margin: 0 auto 100px;
   margin-top: 40px;
+  margin-bottom: 20px;
   padding: 40px;
   border-radius: 5%;
   text-align: center;
