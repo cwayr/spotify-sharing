@@ -79,9 +79,8 @@
             {% endif %}
           </span>
           <span class="likes-count"
-            >{% endif %} {% if post.likes|length == 1 %}1 like{% elif
-            post.likes|length > 1%}{{ post.likes|length }} likes{% endif
-            %}</span
+            >{% endif %} {% if post.likes|count == 1 %}1 like{% elif
+            post.likes|count > 1%}{{ post.likes|count }} likes{% endif %}</span
           >
         </h4>
         <br />
@@ -161,7 +160,31 @@
   </div>
   {% block spotify %} {% endblock %}
 </div>
-<div class="right"></div>
+<div class="right">
+  <div class="most-liked">
+    <h2>Top recommended</h2>
+    <div class="most-liked-feed">
+      {% for song in top_recommended %}
+      <div class="recommendation">
+        <div class="rec-image">
+          <a href="{{ song.s_link }}" target="_blank"
+            ><img src="{{ song.s_image }}" alt="{{ song.s_name }} album image"
+          /></a>
+        </div>
+        <div class="rec-info">
+          <a href="{{ song.s_link }}" target="_blank"
+            ><h4>
+              {{ song.s_name }} <b>-</b>
+              <span class="rec-artist">{{ song.s_artist }}</span>
+            </h4></a
+          >
+          <p>{{ song.likes|count }} &nbsp;<i class="far fa-heart"></i></p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 {% block script %}
 <script src="/static/group.js"></script>
 <script

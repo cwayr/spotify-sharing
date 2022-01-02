@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy.orm import backref
+from sqlalchemy.ext.hybrid import hybrid_property
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -92,6 +93,10 @@ class Post(db.Model):
 
     user = db.relationship('User', backref=backref('posts', cascade='all, delete-orphan'))
     likes = db.relationship('Likes', backref=backref('posts', single_parent=True))
+
+    @hybrid_property
+    def likes_count(self):
+        return self.likes.count()
 
 
 class Likes(db.Model):
