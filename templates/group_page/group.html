@@ -80,7 +80,7 @@
           <span class="likes-count"
             >{% endif %} {% if post.likes|count == 1 %}1 like{% elif
             post.likes|count > 1%}{{ post.likes|count }} likes{% endif %}</span
-          {% endif %}
+          >
           <!--  -->
           {% else %}
           <form
@@ -93,10 +93,6 @@
             </button>
           </form>
           {% endif %}
-          <span class="likes-count">
-            {% if post.likes|length == 1 %}1 like{% elif post.likes|length >
-            1%}{{ post.likes|length }} likes{% endif %}</span
-          >
         </h4>
         <br />
         <p>{{ post.content }}</p>
