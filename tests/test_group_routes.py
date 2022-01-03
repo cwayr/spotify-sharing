@@ -285,6 +285,29 @@ class TestGroupRoutes(TestCase):
             self.assertEqual(again_like, None)
 
 
+    def test_delete_post(self):
+        """Test deleting a post works."""
+
+        with app.test_client() as client:
+            client.post('/user/2/group/1/join')
+            resp = client.post('/user/2/group/1/post', data = {'content': 'Delete this post'}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Delete this post", html)
+            self.assertIn("fa-trash-alt", html)
+
+            # follow_redirects=true
+            delete_resp = client.delete('/user/2/group/1/1/delete', follow_redirects=True)
+            delete_html = delete_resp.get_data(as_text=True)
+
+            self.assertEqual(delete_resp.status_code, 200)
+            self.assertNotIn("Delete this post", delete_html)
+
+            # check db
+            post = Post.query.filter_by(id=1).first()
+            self.assertEqual(post, None)
+
+
 class TestSpotifyAPI(TestCase):
     """Testing spotify routes."""
 

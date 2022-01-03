@@ -94,6 +94,18 @@ def unlike(user_id, group_id, post_id):
     return redirect(f"/user/{user_id}/group/{group_id}")
 
 
+@group_routes.route("/user/<int:user_id>/group/<int:group_id>/<int:post_id>/delete", methods=["GET", "DELETE"])
+@login_required
+def delete_post(user_id, group_id, post_id):
+    """Delete a post."""
+
+    post = Post.query.get(post_id)
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(f"/user/{user_id}/group/{group_id}")
+
+
 @group_routes.route("/user/<int:user_id>/group/<int:group_id>/join", methods=["POST"])
 @login_required
 def add_user_to_group(user_id, group_id):

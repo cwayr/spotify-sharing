@@ -76,11 +76,26 @@
                 <i class="fas fa-heart"></i>
               </button>
             </form>
-            {% endif %}
           </span>
           <span class="likes-count"
             >{% endif %} {% if post.likes|count == 1 %}1 like{% elif
             post.likes|count > 1%}{{ post.likes|count }} likes{% endif %}</span
+          {% endif %}
+          <!--  -->
+          {% else %}
+          <form
+            class="trash-can-form"
+            action="/user/{{ user.id }}/group/{{ group.id }}/{{ post.id }}/delete"
+            method="DELETE"
+          >
+            <button class="trash-btn" type="submit">
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </form>
+          {% endif %}
+          <span class="likes-count">
+            {% if post.likes|length == 1 %}1 like{% elif post.likes|length >
+            1%}{{ post.likes|length }} likes{% endif %}</span
           >
         </h4>
         <br />

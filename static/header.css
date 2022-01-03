@@ -37,3 +37,23 @@
   grid-template-columns: 25% 50% 25%;
   box-sizing: border-box;
 }
+
+/* edit-user page */
+
+/* .delete-user-form {
+  position: relative;
+  background: #c74545;
+  color: #fff;
+  width: 80%;
+  margin-bottom: 10px;
+} */
+
+.delete-user-btn {
+  position: relative;
+  margin-left: 23%;
+  background: #c74545;
+  color: #fff;
+  box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.3);
+}

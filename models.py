@@ -105,8 +105,8 @@ class Likes(db.Model):
     __tablename__ = 'likes'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
 
     __tableargs__ = (db.UniqueConstraint('user_id', 'post_id', name='_user_post_uc')) #https://stackoverflow.com/questions/10059345/sqlalchemy-unique-across-multiple-columns
 
