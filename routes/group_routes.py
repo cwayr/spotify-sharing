@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, redirect, session, request
 from flask_login.utils import login_required
 import requests
 from urllib.parse import urlencode
+
+from sqlalchemy.sql.functions import func
 from forms import PostForm, GroupForm, SpotifySearchForm
 from models import db, User, Group, UserGroup, Post, Likes
 from spotify_api_auth import SpotifyAPI
@@ -19,7 +21,9 @@ def group_page(user_id, group_id):
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
     user_in_group = UserGroup.query.filter(UserGroup.user_id == user_id, UserGroup.group_id == group_id).first() # determine if user is in group (but not admin). Used to choose which action buttons to display.
+
     posts = Post.query.filter(Post.group_id == group_id).all()
+    top_recommended = Post.query.join(Likes).filter(Post.group_id == group_id, Post.s_name != None).group_by(Post.id).order_by(func.count().desc()).limit(5).all()
 
     post_form = PostForm()
 
@@ -27,7 +31,7 @@ def group_page(user_id, group_id):
     if request.method == 'POST' and request.form["btn"] == "delete":
         clear_session()
 
-    return render_template("group.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, clear_session=clear_session)
+    return render_template("group.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
 
 
 @group_routes.route("/user/<int:user_id>/group/<int:group_id>/post", methods=["POST"])
@@ -41,7 +45,6 @@ def post(user_id, group_id):
         content = post_form.content.data
 
         if session.get('track_name'):
-            print('SONG IN SESSION I REPEAT')
             s_image=session.get('track_image')
             s_name=session.get('track_name')
             s_artist=session.get('track_artist')
@@ -51,7 +54,6 @@ def post(user_id, group_id):
             newPost = Post(content=content, user_id=user_id, group_id=group_id, s_image=s_image, s_name=s_name, s_artist=s_artist, s_link=s_link, s_preview=s_preview)
 
         else:
-            print('NOTHING IN SESSION I REPEAT')
             newPost = Post(content=content, user_id=user_id, group_id=group_id)
 
         db.session.add(newPost)

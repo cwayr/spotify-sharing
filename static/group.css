@@ -287,3 +287,59 @@
 .selected {
   border: 3px solid #1db954;
 }
+
+/* right */
+
+.most-liked {
+  height: 60%;
+  margin-top: 25px;
+  padding: 22px;
+}
+
+.most-liked h2 {
+  background-color: #fff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 10px 3px -8px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0 10px 3px -8px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 10px 3px -8px rgba(0, 0, 0, 0.8);
+}
+
+.most-liked-feed {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 60vh;
+}
+
+.most-liked-feed .recommendation {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  width: 100%;
+  margin: 5px 0 5px 0;
+}
+
+.most-liked-feed h4 {
+  display: inline;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
+  word-wrap: normal;
+}
+
+.most-liked-feed img {
+  display: inline;
+  width: 50px;
+  border-radius: 3px;
+}
+
+.rec-info .rec-artist {
+  font-size: 0.8em;
+}
+
+.rec-info p {
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-top: 5px;
+}

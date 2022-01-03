@@ -234,7 +234,17 @@ class TestGroupRoutes(TestCase):
         with app.test_client() as client:
             # display like button
             client.post('/user/2/group/1/join')
-            client.post('/user/2/group/1/post', data = {'content': 'Like this post'})
+
+            # put song data in session
+            with app.test_request_context():
+                with client.session_transaction() as sess:
+                    sess['track_image'] = 'song_image'
+                    sess['track_name'] = 'song_name'
+                    sess['track_artist'] = 'song_artist'
+                    sess['track_link'] = 'song_link'
+                    sess['track_preview'] = 'song_preview'
+
+            client.post('/user/2/group/1/post', data = {'content': 'Like this post'}) # post includes song data from session
 
             post_author_res = client.get('/user/2/group/1')
             post_author_html = post_author_res.get_data(as_text=True)
@@ -244,6 +254,9 @@ class TestGroupRoutes(TestCase):
             self.assertNotIn('fa-heart', post_author_html)
             self.assertIn('far fa-heart', post_viewer_html)
 
+             # top-recommended section
+            self.assertNotIn('rec-image', post_viewer_html)
+
             # like post
             post_id = Post.query.filter_by(content='Like this post').first().id
             like_post_res = client.post(f'/user/1/group/1/{post_id}/like', follow_redirects=True)
@@ -251,6 +264,9 @@ class TestGroupRoutes(TestCase):
 
             self.assertIn("1 like", like_post_html)
             self.assertIn("fas fa-heart", like_post_html)
+
+            # top-recommended section
+            self.assertIn("rec-image", like_post_html)
 
             # (check db)
             like = Likes.query.filter_by(id=1).first()
