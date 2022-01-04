@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import db, User, Group, UserGroup
+from models import db, User, Group, UserGroup, Post
 from app import app
 
 app.config.from_object('config.TestingConfig')
@@ -43,6 +43,10 @@ class TestUserRoutes(TestCase):
             db.session.add(user_group)
             db.session.commit()
 
+            song_post = Post(user_id=2, group_id=1, content='Like this post', s_name='song_name', s_image='song_image', s_artist='song_artist', s_link='song_link', s_preview='song_preview')
+            db.session.add(song_post)
+            db.session.commit()
+
             resp = client.get('/user/2')
             html = resp.get_data(as_text=True)
 
@@ -51,6 +55,9 @@ class TestUserRoutes(TestCase):
 
             self.assertIn('<h3>Test Group 2</h3>', html)
             self.assertIn('<h3>Test Group</h3', html)
+
+            self.assertIn('<h2>Recent recommendations</h2>', html)
+            self.assertIn('song_name', html)
 
 
     def test_edit_user(self):

@@ -22,7 +22,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 connect_db(app)
-db.drop_all()
 db.create_all()
 
 app.register_blueprint(landing_routes)
