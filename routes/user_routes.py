@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect
 from flask_login import login_required
-from models import db, User, Group, UserGroup
+from models import db, User, Group, UserGroup, Post
 from forms import GroupForm, EditUserForm
 
 user_routes = Blueprint("user_routes", __name__, static_folder="../static", template_folder="../templates/user_page")
@@ -20,8 +20,9 @@ def user_page(user_id):
     users_groups = UserGroup.query.filter_by(user_id=user_id).all()
     joined_group_ids = [group.group_id for group in users_groups]
     joined_groups = Group.query.filter(Group.admin_id != user_id).filter(Group.id.in_(joined_group_ids)).all()
+    recently_recommended = Post.query.filter(Post.user_id == user_id, Post.s_name != None).limit(5)
 
-    return render_template("user-page.html", user=user, created_groups=created_groups, joined_groups=joined_groups)
+    return render_template("user-page.html", user=user, created_groups=created_groups, joined_groups=joined_groups, recently_recommended=recently_recommended)
 
 
 @user_routes.route("/user/<int:user_id>/edit", methods=["GET", "POST"])

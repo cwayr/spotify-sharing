@@ -48,4 +48,28 @@
     </div>
   </div>
 </div>
+<div class="right">
+  <div class="recently-recommended">
+    <h2>Recent recommendations</h2>
+    <div class="recently-recommended-feed">
+      {% for song in recently_recommended %}
+      <div class="recommendation">
+        <div class="rec-image">
+          <a href="{{ song.s_link }}" target="_blank"
+            ><img src="{{ song.s_image }}" alt="{{ song.s_name }} album image"
+          /></a>
+        </div>
+        <div class="rec-info">
+          <a href="{{ song.s_link }}" target="_blank"
+            ><h4>
+              {{ song.s_name }} <b>-</b>
+              <span class="rec-artist">{{ song.s_artist }}</span>
+            </h4></a
+          >
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}
