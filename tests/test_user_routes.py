@@ -55,6 +55,7 @@ class TestUserRoutes(TestCase):
 
             self.assertIn('<h3>Test Group 2</h3>', html)
             self.assertIn('<h3>Test Group</h3', html)
+            self.assertIn('A group for testing', html)
 
             self.assertIn('<h2>Recent recommendations</h2>', html)
             self.assertIn('song_name', html)

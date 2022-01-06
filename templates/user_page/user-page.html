@@ -29,7 +29,7 @@
       {% for group in created_groups %}
       <a href="/user/{{ user.id }}/group/{{ group.id }}" class="group-tile"
         ><h3>{{ group.name}}</h3>
-        <h4>_ members</h4>
+        <h4>{{ group.description }}</h4>
       </a>
       {% endfor %}
     </div>
@@ -42,7 +42,7 @@
       {% for group in joined_groups %}
       <a href="/user/{{ user.id }}/group/{{ group.id }}" class="group-tile"
         ><h3>{{ group.name}}</h3>
-        <h4>_ members</h4>
+        <h4>{{ group.description }}</h4>
       </a>
       {% endfor %}
     </div>
