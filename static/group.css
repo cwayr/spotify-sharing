@@ -1,4 +1,14 @@
-.center {
+.member-count {
+  margin: 30px 0 15px 15px;
+  font-size: 1.2em;
+}
+
+.description {
+  margin: 0 0 15px 15px;
+  font-size: 0.8em;
+}
+
+.artist {
   box-sizing: border-box;
 }
 
