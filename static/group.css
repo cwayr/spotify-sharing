@@ -1,11 +1,9 @@
-.member-count {
-  margin: 30px 0 15px 15px;
-  font-size: 1.2em;
+.group-info {
+  margin-left: 15px;
 }
 
-.description {
-  margin: 0 0 15px 15px;
-  font-size: 0.8em;
+.group-info h2 {
+  font-size: 1.6em;
 }
 
 .artist {
