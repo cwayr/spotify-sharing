@@ -16,6 +16,15 @@
   >
     <button type="submit" class="join-btn">Join group</button>
   </form>
+  <div class="member-count">
+    <h2>
+      {{ group_user_count }}{% if group_user_count == 1 %} member{% else %}
+      members{% endif %}
+    </h2>
+  </div>
+  <div class="description">
+    <h3>{{ group.description }}</h3>
+  </div>
 </div>
 <!--  -->
 <div class="center">

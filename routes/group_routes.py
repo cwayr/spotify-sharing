@@ -37,7 +37,7 @@ def group_page(user_id, group_id):
         clear_session()
 
     if not user_in_group:
-        return render_template("group-unjoined.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
+        return render_template("group-unjoined.html", user=user, group=group, user_in_group=user_in_group, group_user_count=group_user_count, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
 
     return render_template("group.html", user=user, group=group, user_in_group=user_in_group, group_user_count=group_user_count, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
 
