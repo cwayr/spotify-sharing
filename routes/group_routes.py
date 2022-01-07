@@ -25,6 +25,7 @@ def group_page(user_id, group_id):
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
     user_in_group = UserGroup.query.filter(UserGroup.user_id == user_id, UserGroup.group_id == group_id).first() # determine if user is in group (but not admin). Used to choose which action buttons to display.
+    group_user_count = UserGroup.query.filter(UserGroup.group_id == group_id).count() # number of users in group
 
     posts = Post.query.filter(Post.group_id == group_id).all()
     top_recommended = Post.query.join(Likes).filter(Post.group_id == group_id, Post.s_name != None).group_by(Post.id).order_by(func.count().desc()).limit(5).all()
@@ -38,7 +39,7 @@ def group_page(user_id, group_id):
     if not user_in_group:
         return render_template("group-unjoined.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
 
-    return render_template("group.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
+    return render_template("group.html", user=user, group=group, user_in_group=user_in_group, group_user_count=group_user_count, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
 
 
 @group_routes.route("/user/<int:user_id>/group/<int:group_id>/post", methods=["POST"])

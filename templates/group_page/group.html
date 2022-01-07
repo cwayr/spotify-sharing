@@ -35,6 +35,15 @@
     <button type="submit" class="delete-btn">Delete group</button>
   </form>
   {% endif %}
+  <div class="member-count">
+    <h2>
+      {{ group_user_count }}{% if group_user_count == 1 %} member{% else %}
+      members{% endif %}
+    </h2>
+  </div>
+  <div class="description">
+    <h3>{{ group.description }}</h3>
+  </div>
 </div>
 <!--  -->
 <div class="center">
@@ -70,11 +79,8 @@
                 <i class="fas fa-heart"></i>
               </button>
             </form>
+            {% endif %}
           </span>
-          <span class="likes-count"
-            >{% endif %} {% if post.likes|count == 1 %}1 like{% elif
-            post.likes|count > 1%}{{ post.likes|count }} likes{% endif %}</span
-          >
           <!--  -->
           {% else %}
           <form
@@ -87,6 +93,10 @@
             </button>
           </form>
           {% endif %}
+          <span class="likes-count"
+            >{% if post.likes|count == 1 %}1 like{% elif post.likes|count >
+            1%}{{ post.likes|count }} likes{% endif %}</span
+          >
         </h4>
         <br />
         <p>{{ post.content }}</p>

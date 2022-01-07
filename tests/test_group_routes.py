@@ -31,6 +31,10 @@ class TestGroupRoutes(TestCase):
         db.session.add(self.test_group)
         db.session.commit()
 
+        self.test_user_group = UserGroup(user_id=1, group_id=1)
+        db.session.add(self.test_user_group)
+        db.session.commit()
+
     def tearDown(self):
         db.session.rollback()
         return super().tearDown()
@@ -59,7 +63,9 @@ class TestGroupRoutes(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Test Group</h1>", html)
+            self.assertIn("Test Group", html)
+            self.assertIn("A group for testing", html)
+            self.assertIn("1 member", html)
 
 
     def test_admin_group_view(self):
