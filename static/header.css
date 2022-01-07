@@ -57,3 +57,8 @@
   -webkit-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 0 36px 0 rgba(0, 0, 0, 0.3);
 }
+
+.none {
+  font-size: 1.2em;
+  font-style: italic;
+}

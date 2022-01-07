@@ -77,6 +77,7 @@ class TestGroupRoutes(TestCase):
 
             self.assertIn("Edit group", html)
 
+
     # test_create_group located in 'test_user_routes' because it is a functionality used from the user home page.
 
 
