@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect
 from flask_login import login_required
 from models import db, User, Group, UserGroup, Post
 from forms import GroupForm, EditUserForm
+from flask_login import current_user
 
 user_routes = Blueprint("user_routes", __name__, static_folder="../static", template_folder="../templates/user_page")
 
@@ -22,6 +23,9 @@ def user_page(user_id):
     joined_groups = Group.query.filter(Group.admin_id != user_id).filter(Group.id.in_(joined_group_ids)).all()
     recently_recommended = Post.query.filter(Post.user_id == user_id, Post.s_name != None).limit(5)
 
+    if user_id != current_user.id:
+        return render_template("user-page-anon.html", user=user, created_groups=created_groups, joined_groups=joined_groups, recently_recommended=recently_recommended)
+
     return render_template("user-page.html", user=user, created_groups=created_groups, joined_groups=joined_groups, recently_recommended=recently_recommended)
 
 
@@ -29,6 +33,9 @@ def user_page(user_id):
 @login_required
 def edit_user(user_id):
     """Edit user details."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{user_id}')
 
     user = User.query.get(user_id)
     form = EditUserForm(obj=user)
@@ -51,6 +58,9 @@ def edit_user(user_id):
 def delete_user(user_id):
     """Delete user."""
 
+    if user_id != current_user.id:
+        return redirect(f'/user/{user_id}')
+
     user = User.query.get(user_id)
     db.session.delete(user)
     db.session.commit()
@@ -62,6 +72,9 @@ def delete_user(user_id):
 @login_required
 def create_new_group(user_id):
     """Create a new group."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{user_id}')
 
     user = User.query.get(user_id)
     form = GroupForm()
@@ -87,6 +100,9 @@ def create_new_group(user_id):
 @login_required
 def browse_created_groups(user_id):
     """Browse all created groups."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{user_id}')
 
     user = User.query.get(user_id)
 

@@ -1,4 +1,4 @@
-<!-- GROUP PAGE FOR USER IN GROUP -->
+<!-- GROUP PAGE FOR USER NOT IN GROUP -->
 
 {% extends 'header.html' %}
 <!-- -->
@@ -9,32 +9,13 @@
 {% block morecontent %}
 <div class="left">
   <a href="/user/{{ user.id }}"><button class="back-btn">Back</button></a>
-  {% if group.admin_id != user.id %}
-  <!-- non-admin buttons -->
   <form
     class="group-actions-form"
-    method="DELETE"
-    action="/user/{{ user.id }}/group/{{ group.id }}/leave"
+    method="POST"
+    action="/user/{{ user.id }}/group/{{ group.id }}/join"
   >
-    <button type="submit" class="leave-btn">Leave group</button>
+    <button type="submit" class="join-btn">Join group</button>
   </form>
-  {% else %}
-  <!-- admin buttons -->
-  <form
-    class="group-actions-form"
-    action="/user/{{ user.id }}/group/{{ group.id }}/edit"
-  >
-    <button type="submit" class="edit-btn">Edit group</button>
-  </form>
-  <form
-    class="group-actions-form"
-    method="DELETE"
-    action="/user/{{ user.id }}/group/{{ group.id }}/delete"
-    onSubmit="return confirm('Are you sure you wish to delete?');"
-  >
-    <button type="submit" class="delete-btn">Delete group</button>
-  </form>
-  {% endif %}
 </div>
 <!--  -->
 <div class="center">
@@ -114,53 +95,6 @@
         {% endif %}
       </div>
       {% endfor %}
-    </div>
-    <div class="feed-post-creation">
-      <div class="feed-post-creation-input">
-        <form
-          action="/user/{{ user.id }}/group/{{ group.id }}/post"
-          method="POST"
-          novalidate="True"
-          id="post-form"
-        >
-          {{ post_form.hidden_tag() }}
-          <!--  -->
-          {{ post_form.content }}
-          <!--  -->
-        </form>
-      </div>
-      <div class="feed-post-creation-spotify">
-        {% if session['track_name'] %}
-        <div class="delete-img">
-          <form
-            action="/user/{{ user.id }}/group/{{ group.id }}"
-            method="POST"
-            novalidate="True"
-          >
-            <button type="submit" name="btn" value="delete">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </form>
-        </div>
-        <img
-          id="selected-track-img"
-          src="{{ session['track_image'] }}"
-          alt="{{ session['track_title'] }} album image"
-        />
-        {% endif %}
-      </div>
-      <div class="feed-post-creation-btns">
-        <form action="/user/{{ user.id }}/group/{{ group.id }}/search_spotify">
-          <button
-            type="submit"
-            class="spotify-btn"
-            onclick="{{ session.pop('track_results', None) }}"
-          >
-            Search Spotify
-          </button>
-        </form>
-        <button form="post-form" type="submit" class="post-btn">Post</button>
-      </div>
     </div>
   </div>
   {% block spotify %} {% endblock %}

@@ -1,4 +1,4 @@
-<!-- USER PAGE FOR LOGGED IN USER -->
+<!-- USER PAGE FOR ANON USER -->
 
 {% extends 'header.html' %}
 <!--  -->
@@ -17,36 +17,29 @@
     {{ created_groups|length }}{% if created_groups|length == 1%} group{% else
     %} groups{% endif %}
   </p>
-  <a href="/user/{{ user.id }}/edit"
-    ><button class="edit-btn">Edit details</button></a
-  >
 </div>
 <div class="profile-content">
   <div class="groups">
-    <h2>My groups</h2>
+    <h2>{{ user.username }}'s groups</h2>
     <div class="groups-section">
-      <form action="/user/{{ user.id }}/new-group">
-        <button><h3>New group</h3></button>
-      </form>
       {% for group in created_groups %}
       <a href="/user/{{ user.id }}/group/{{ group.id }}" class="group-tile"
         ><h3>{{ group.name}}</h3>
         <h4>_ members</h4>
       </a>
-      {% endfor %}
+      {% endfor %}{% if not created_groups %}<span class="none">None</span>{%
+      endif %}
     </div>
     <!--  -->
-    <h2>Joined groups</h2>
+    <h2>{{ user.username }}'s joined groups</h2>
     <div class="groups-section">
-      <form action="/user/{{ user.id }}/browse-groups">
-        <button><h3>Browse groups</h3></button>
-      </form>
       {% for group in joined_groups %}
       <a href="/user/{{ user.id }}/group/{{ group.id }}" class="group-tile"
         ><h3>{{ group.name}}</h3>
         <h4>_ members</h4>
       </a>
-      {% endfor %}
+      {% endfor %} {% if not joined_groups %}<span class="none">None</span>{%
+      endif %}
     </div>
   </div>
 </div>

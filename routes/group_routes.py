@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 from sqlalchemy.sql.functions import func
 from forms import PostForm, GroupForm, SpotifySearchForm
 from models import db, User, Group, UserGroup, Post, Likes
+from flask_login import current_user
 from spotify_api_auth import SpotifyAPI
 from api_keys import CLIENT_ID, CLIENT_SECRET
 from helpers import clear_session
@@ -17,6 +18,9 @@ group_routes = Blueprint("group_routes", __name__, static_folder="../static", te
 @login_required
 def group_page(user_id, group_id):
     """Display group page."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
 
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
@@ -31,6 +35,9 @@ def group_page(user_id, group_id):
     if request.method == 'POST' and request.form["btn"] == "delete":
         clear_session()
 
+    if not user_in_group:
+        return render_template("group-unjoined.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
+
     return render_template("group.html", user=user, group=group, user_in_group=user_in_group, posts=posts, post_form=post_form, top_recommended=top_recommended, clear_session=clear_session)
 
 
@@ -38,6 +45,9 @@ def group_page(user_id, group_id):
 @login_required
 def post(user_id, group_id):
     """Create post."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
 
     post_form = PostForm()
 
@@ -68,6 +78,9 @@ def post(user_id, group_id):
 def like(user_id, group_id, post_id):
     """Like a post."""
 
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
+
     user = User.query.get(user_id)
     post = Post.query.get(post_id)
 
@@ -82,6 +95,9 @@ def like(user_id, group_id, post_id):
 @login_required
 def unlike(user_id, group_id, post_id):
     """Unlike a post."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
 
     user = User.query.get(user_id)
     post = Post.query.get(post_id)
@@ -99,6 +115,9 @@ def unlike(user_id, group_id, post_id):
 def delete_post(user_id, group_id, post_id):
     """Delete a post."""
 
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
+
     post = Post.query.get(post_id)
     db.session.delete(post)
     db.session.commit()
@@ -110,6 +129,9 @@ def delete_post(user_id, group_id, post_id):
 @login_required
 def add_user_to_group(user_id, group_id):
     """Add current user to group."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
 
     new_user_group = UserGroup(user_id=user_id, group_id=group_id)
     db.session.add(new_user_group)
@@ -123,6 +145,9 @@ def add_user_to_group(user_id, group_id):
 def remove_user_from_group(user_id, group_id):
     """Remove current user from group."""
 
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
+
     user_group = UserGroup.query.filter(UserGroup.user_id == user_id, UserGroup.group_id == group_id).first()
     db.session.delete(user_group)
     db.session.commit()
@@ -134,6 +159,9 @@ def remove_user_from_group(user_id, group_id):
 @login_required
 def edit_group(user_id, group_id):
     """Edit group."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
 
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
@@ -154,6 +182,9 @@ def edit_group(user_id, group_id):
 def delete_group(user_id, group_id):
     """Delete group."""
 
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}')
+
     group = Group.query.get(group_id)
     db.session.delete(group)
     db.session.commit()
@@ -165,6 +196,9 @@ def delete_group(user_id, group_id):
 @login_required
 def search_spotify(user_id, group_id):
     """Search Spotify API for songs."""
+
+    if user_id != current_user.id:
+        return redirect(f'/user/{current_user.id}/group/{group_id}/search_spotify')
 
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
