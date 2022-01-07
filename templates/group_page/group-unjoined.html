@@ -16,14 +16,13 @@
   >
     <button type="submit" class="join-btn">Join group</button>
   </form>
-  <div class="member-count">
+  <div class="group-info">
+    <p>Owner: <a href="/user/{{ admin.id }}">{{ admin.username }}</a></p>
     <h2>
       {{ group_user_count }}{% if group_user_count == 1 %} member{% else %}
       members{% endif %}
     </h2>
-  </div>
-  <div class="description">
-    <h3>{{ group.description }}</h3>
+    <h4>{{ group.description }}</h4>
   </div>
 </div>
 <!--  -->
@@ -36,7 +35,7 @@
       {% for post in posts %}
       <div class="post">
         <h4>
-          {{ post.user.username }}
+          <a href="/user/{{ post.user.id }}">{{ post.user.username }}</a>
           <span class="likes">
             <!-- if post is not logged-in-user's post -->
             {% if post.user.id != user.id %}
