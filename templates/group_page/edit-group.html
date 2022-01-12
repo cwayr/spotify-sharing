@@ -13,7 +13,7 @@
     <!--  -->
     {{ field(placeholder=field.description) }}
     <!--  -->
-    {% for error in form.errors %}
+    {% for error in field.errors %}
     <p class="error-message">{{ error }}</p>
     {% endfor %}
     <br />
