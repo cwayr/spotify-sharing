@@ -204,6 +204,7 @@ def search_spotify(user_id, group_id):
 
     user = User.query.get(user_id)
     group = Group.query.get(group_id)
+    admin = User.query.get(group.admin_id)
 
     search_form = SpotifySearchForm()
 
@@ -235,6 +236,6 @@ def search_spotify(user_id, group_id):
         return redirect(f"/user/{user_id}/group/{group_id}")
 
     if (session.get('track_results') != None):
-        return render_template("search_spotify.html", user=user, group=group, search_form=search_form, post_form=PostForm(), tracks=session.get('track_results'))
+        return render_template("search_spotify.html", user=user, group=group, admin=admin, search_form=search_form, post_form=PostForm(), tracks=session.get('track_results'))
     else:
-        return render_template("search_spotify.html", user=user, group=group, search_form=search_form, post_form=PostForm())
+        return render_template("search_spotify.html", user=user, group=group, admin=admin, search_form=search_form, post_form=PostForm())
