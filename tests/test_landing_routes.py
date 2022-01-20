@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '/home/caleb/capstones/spotify-sharing/tests')
+
 from unittest import TestCase
 from models import db, User
 from app import app
@@ -77,6 +80,8 @@ class TestLandingRoutes(TestCase):
         new_user = User.user_signup(name='Test User', username='testuser', password='password')
         db.session.add(new_user)
         db.session.commit()
+
+        User.user_login(username='testuser', password='p')
 
         self.assertTrue(User.user_login(username='testuser', password='password'))
         self.assertFalse(User.user_login(username='testuser', password='wrong_password'))
