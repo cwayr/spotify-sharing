@@ -1,5 +1,3 @@
-"""Model tests."""
-
 from unittest import TestCase
 from models import db, User, Group, UserGroup, Post
 from app import app
@@ -43,8 +41,8 @@ class UserModelTestCase(TestCase):
         db.session.commit()
 
         # add posts to groups
-        post_1 = Post(content="Post 1 content", user_id=1, group_id=1, spotify_id=100)
-        post_2 = Post(content="Post 2 content", user_id=2, group_id=1, is_reply=True, reply_to = 1)
+        post_1 = Post(content="Post 1 content", user_id=1, group_id=1)
+        post_2 = Post(content="Post 2 content", user_id=2, group_id=1)
         post_3 = Post(content="Post 3 content", user_id=3, group_id=2)
 
         db.session.add_all([post_1, post_2, post_3])
@@ -109,11 +107,5 @@ class UserModelTestCase(TestCase):
 
         get_post_2 = Post.query.get_or_404(2)
         self.assertEqual(get_post_2.content, "Post 2 content")
-
-        get_post_2_reply_to = Post.query.get_or_404(2).reply_to
-        self.assertEqual(get_post_2_reply_to, 1)
-
-        get_post_2_is_reply = Post.query.get_or_404(2).is_reply
-        self.assertEqual(get_post_2_is_reply, True)
 
 

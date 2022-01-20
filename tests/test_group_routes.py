@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '/home/caleb/capstones/spotify-sharing/tests')
+
 from unittest import TestCase
 from models import db, User, Group, UserGroup, Post, Likes
 from app import app
@@ -13,17 +16,17 @@ class TestGroupRoutes(TestCase):
         db.drop_all()
         db.create_all()
 
-        # create three test users
-        self.test_user = User(full_name='Test User', username='testuser', password='password')
-        db.session.add(self.test_user)
+        # signup 3 users
+        new_user = User.user_signup(name='Test User', username='testuser', password='password')
+        db.session.add(new_user)
         db.session.commit()
 
-        self.test_user2 = User(full_name='Test User Jr.', username='testuserjr', password='passwordjr')
-        db.session.add(self.test_user2)
+        new_user2 = User.user_signup(name='Test User Jr', username='testuserjr', password='passwordjr')
+        db.session.add(new_user2)
         db.session.commit()
 
-        self.test_user3 = User(full_name='Test User III', username='testuseriii', password='passwordiii')
-        db.session.add(self.test_user3)
+        new_user3 = User.user_signup(name='Test User III', username='testuseriii', password='passwordiii')
+        db.session.add(new_user3)
         db.session.commit()
 
         # create test group (user 1 admin)
@@ -44,38 +47,59 @@ class TestGroupRoutes(TestCase):
         """Test browse-groups page displays correctly."""
 
         with app.test_client() as client:
-            resp = client.get('/user/2/browse-groups')
-            html = resp.get_data(as_text=True)
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
 
-            self.assertIn("Test Group", html)
+                resp = client.get('/user/2/browse-groups')
+                html = resp.get_data(as_text=True)
 
-            resp2 = client.get("/user/1/browse-groups")
-            html2 = resp2.get_data(as_text=True)
+                self.assertIn("Test Group", html)
 
-            self.assertNotIn("Test Group", html2)
+                resp2 = client.get("/user/1/browse-groups")
+                html2 = resp2.get_data(as_text=True)
+
+                self.assertNotIn("Test Group", html2)
 
 
     def test_group_view(self):
         """Test group page displays correctly."""
 
         with app.test_client() as client:
-            resp = client.get('/user/1/group/1')
-            html = resp.get_data(as_text=True)
+            with self.client:
+                # login user 1
+                client.post('/login', data={
+                'username': 'testuser',
+                'password': 'password'
+                })
 
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Test Group", html)
-            self.assertIn("A group for testing", html)
-            self.assertIn("1 member", html)
+                resp = client.get('/user/1/group/1')
+                html = resp.get_data(as_text=True)
+
+                self.assertEqual(resp.status_code, 200)
+                self.assertIn("Test Group", html)
+                self.assertIn("A group for testing", html)
+                self.assertIn("1 member", html)
 
 
     def test_admin_group_view(self):
         """Test group page displays correctly to admin."""
 
         with app.test_client() as client:
-            resp = client.get('/user/1/group/1')
-            html = resp.get_data(as_text=True)
+            with self.client:
+                # login user 1
+                client.post('/login', data={
+                'username': 'testuser',
+                'password': 'password'
+                })
+                
+                resp = client.get('/user/1/group/1')
+                html = resp.get_data(as_text=True)
 
-            self.assertIn("Edit group", html)
+                self.assertIn("Edit group", html)
 
 
     # test_create_group located in 'test_user_routes' because it is a functionality used from the user home page.
@@ -85,122 +109,168 @@ class TestGroupRoutes(TestCase):
         """Test joining a group works."""
 
         with app.test_client() as client:
-            # follow_redirects=false
-            resp = client.post('/user/2/group/1/join')
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
+                
+                # follow_redirects=false
+                resp = client.post('/user/2/group/1/join')
 
-            self.assertEqual(resp.status_code, 302)
+                self.assertEqual(resp.status_code, 302)
 
-            # follow_redirects=true
-            redirect_resp = client.post('/user/3/group/1/join', follow_redirects=True)
-            html = redirect_resp.get_data(as_text=True)
+                # login user 3
+                client.post('/login', data={
+                'username': 'testuseriii',
+                'password': 'passwordjriii'
+                })
 
-            self.assertEqual(redirect_resp.status_code, 200)
-            self.assertIn('Leave group', html)
+                # follow_redirects=true
+                redirect_resp = client.post('/user/3/group/1/join', follow_redirects=True)
+                html = redirect_resp.get_data(as_text=True)
 
-            # check db
-            user3_in_group = UserGroup.query.filter_by(user_id=3).count()
-            user_group_len = UserGroup.query.filter_by(group_id=1).count()
+                self.assertEqual(redirect_resp.status_code, 200)
+                self.assertIn('Leave group', html)
 
-            self.assertEqual(user3_in_group, 1)
-            self.assertEqual(user_group_len, 2)
+                # check db
+                user2_in_group = UserGroup.query.filter_by(user_id=2).count()
+                user_group_len = UserGroup.query.filter_by(group_id=1).count()
+
+                self.assertEqual(user2_in_group, 1)
+                self.assertEqual(user_group_len, 2)
 
 
     def test_leave_group(self):
         """Test leaving a group works."""
 
         with app.test_client() as client:
-            # follow_redirects=false
-            client.post('/user/2/group/1/join')
-            resp = client.delete('/user/2/group/1/leave')
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
+                
+                # follow_redirects=false
+                client.post('/user/2/group/1/join')
+                resp = client.delete('/user/2/group/1/leave')
 
-            self.assertEqual(resp.status_code, 302)
+                self.assertEqual(resp.status_code, 302)
 
-            # follow_redirects=true
-            client.post('/user/3/group/1/join')
-            redirect_resp = client.delete('/user/3/group/1/leave', follow_redirects=True)
-            html = redirect_resp.get_data(as_text=True)
+                # login user 3
+                client.post('/login', data={
+                'username': 'testuseriii',
+                'password': 'passwordiii'
+                })
 
-            self.assertEqual(redirect_resp.status_code, 200)
-            self.assertIn('Join group', html)
+                # follow_redirects=true
+                client.post('/user/3/group/1/join')
+                redirect_resp = client.delete('/user/3/group/1/leave', follow_redirects=True)
+                html = redirect_resp.get_data(as_text=True)
 
-            # check db
-            client.post('/user/3/group/1/join')
-            user3_in_group = UserGroup.query.filter_by(user_id=3).count()
+                self.assertEqual(redirect_resp.status_code, 200)
+                self.assertIn('Join group', html)
 
-            self.assertEqual(user3_in_group, 1)
+                # check db
+                client.post('/user/3/group/1/join')
+                user3_in_group = UserGroup.query.filter_by(user_id=3).count()
 
-            client.delete('/user/3/group/1/leave')
-            user3_not_in_group = UserGroup.query.filter_by(user_id=3).count()
+                self.assertEqual(user3_in_group, 1)
 
-            self.assertEqual(user3_not_in_group, 0)
+                client.delete('/user/3/group/1/leave')
+                user3_not_in_group = UserGroup.query.filter_by(user_id=3).count()
+
+                self.assertEqual(user3_not_in_group, 0)
 
 
     def test_edit_group(self):
         """Test editing a group works."""
 
         with app.test_client() as client:
-            # follow_redirects=false
-            resp = client.post('/user/1/group/1/edit', data = {'name': 'Test Group', 'description': 'Is the group really for testing?'})
-            html = resp.get_data(as_text=True)
+            with self.client:
+                # login user 1
+                client.post('/login', data={
+                'username': 'testuser',
+                'password': 'password'
+                })
 
-            self.assertEqual(resp.status_code, 302)
+                # follow_redirects=false
+                resp = client.post('/user/1/group/1/edit', data = {'name': 'Test Group', 'description': 'Is the group really for testing?'})
+                html = resp.get_data(as_text=True)
 
-            # follow_redirects=true
-            redirect_resp = client.post('/user/1/group/1/edit', data = {'name': 'Test Group Edited', 'description': 'It really is for testing!'}, follow_redirects=True)
-            html = redirect_resp.get_data(as_text=True)
+                self.assertEqual(resp.status_code, 302)
 
-            self.assertEqual(redirect_resp.status_code, 200)
-            self.assertIn("Edit group", html)
+                # follow_redirects=true
+                redirect_resp = client.post('/user/1/group/1/edit', data = {'name': 'Test Group Edited', 'description': 'It really is for testing!'}, follow_redirects=True)
+                html = redirect_resp.get_data(as_text=True)
 
-            # check db
-            group = Group.query.filter_by(id=1).first()
+                self.assertEqual(redirect_resp.status_code, 200)
+                self.assertIn("Edit group", html)
 
-            self.assertEqual(group.name, 'Test Group Edited')
-            self.assertEqual(group.description, "It really is for testing!")
+                # check db
+                group = Group.query.filter_by(id=1).first()
+
+                self.assertEqual(group.name, 'Test Group Edited')
+                self.assertEqual(group.description, "It really is for testing!")
 
 
     def test_delete_group(self):
         """Test deleting a group works."""
 
         with app.test_client() as client:
-            # follow_redirects=true
-            redirect_resp = client.delete('/user/1/group/1/delete', follow_redirects=True)
-            html = redirect_resp.get_data(as_text=True)
+            with self.client:
+                # login user 1
+                client.post('/login', data={
+                'username': 'testuser',
+                'password': 'password'
+                })
 
-            self.assertEqual(redirect_resp.status_code, 200)
-            self.assertIn("Browse groups", html)
+                # follow_redirects=true
+                redirect_resp = client.delete('/user/1/group/1/delete', follow_redirects=True)
+                html = redirect_resp.get_data(as_text=True)
 
-            # check db
-            group = Group.query.filter_by(id=1).first()
-            self.assertEqual(group, None)
+                self.assertEqual(redirect_resp.status_code, 200)
+                self.assertIn("Browse groups", html)
+
+                # check db
+                group = Group.query.filter_by(id=1).first()
+                self.assertEqual(group, None)
 
 
     def test_post_in_group(self):
         """Test posting in a group works."""
 
         with app.test_client() as client:
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
 
-            client.post('/user/2/group/1/join')
+                # join group
+                client.post('/user/2/group/1/join')
 
-        # post without song
-            # follow_redirects=false
-            resp = client.post('/user/2/group/1/post', data = {'content': 'This is a test post!'})
+                # follow_redirects=false
+                resp = client.post('/user/2/group/1/post', data = {'content': 'This is a test post!'})
 
-            self.assertEqual(resp.status_code, 302)
+                self.assertEqual(resp.status_code, 302)
 
-            # follow_redirects=true
-            redirect_resp = client.post('/user/2/group/1/post', data = {'content': 'This is a test post!'}, follow_redirects=True)
-            html = redirect_resp.get_data(as_text=True)
+                # follow_redirects=true
+                redirect_resp = client.post('/user/2/group/1/post', data = {'content': 'This is a test post!'}, follow_redirects=True)
+                html = redirect_resp.get_data(as_text=True)
 
-            self.assertEqual(redirect_resp.status_code, 200)
-            self.assertIn('testuserjr', html)
-            self.assertIn('This is a test post!', html)
+                self.assertEqual(redirect_resp.status_code, 200)
+                self.assertIn('testuserjr', html)
+                self.assertIn('This is a test post!', html)
 
-            # check db
-            post = Post.query.filter_by(id=1).first()
+                # check db
+                post = Post.query.filter_by(id=1).first()
 
-            self.assertEqual(post.content, 'This is a test post!')
-            self.assertEqual(post.user_id, 2)
+                self.assertEqual(post.content, 'This is a test post!')
+                self.assertEqual(post.user_id, 2)
 
 
     def test_post_song_in_group(self):
@@ -214,6 +284,13 @@ class TestGroupRoutes(TestCase):
                     sess['track_artist'] = 'song_artist'
                     sess['track_link'] = 'song_link'
                     sess['track_preview'] = 'song_preview'
+
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
 
                 # follow_redirects=true
                 song_resp = client.post('/user/2/group/1/post', data = {'content': 'Check out this one!'})
@@ -239,124 +316,119 @@ class TestGroupRoutes(TestCase):
         """Test liking and unliking a post works."""
 
         with app.test_client() as client:
-            # display like button
-            client.post('/user/2/group/1/join')
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
 
-            # put song data in session
-            with app.test_request_context():
-                with client.session_transaction() as sess:
-                    sess['track_image'] = 'song_image'
-                    sess['track_name'] = 'song_name'
-                    sess['track_artist'] = 'song_artist'
-                    sess['track_link'] = 'song_link'
-                    sess['track_preview'] = 'song_preview'
+                # display like button
+                client.post('/user/2/group/1/join')
 
-            client.post('/user/2/group/1/post', data = {'content': 'Like this post'}) # post includes song data from session
+                # put song data in session
+                with app.test_request_context():
+                    with client.session_transaction() as sess:
+                        sess['track_image'] = 'song_image'
+                        sess['track_name'] = 'song_name'
+                        sess['track_artist'] = 'song_artist'
+                        sess['track_link'] = 'song_link'
+                        sess['track_preview'] = 'song_preview'
 
-            post_author_res = client.get('/user/2/group/1')
-            post_author_html = post_author_res.get_data(as_text=True)
-            post_viewer_res = client.get('/user/1/group/1')
-            post_viewer_html = post_viewer_res.get_data(as_text=True)
+                client.post('/user/2/group/1/post', data = {'content': 'Like this post'}) # post includes song data from session
 
-            self.assertNotIn('fa-heart', post_author_html)
-            self.assertIn('far fa-heart', post_viewer_html)
+                # post author
+                post_author_res = client.get('/user/2/group/1')
+                post_author_html = post_author_res.get_data(as_text=True)
 
-             # top-recommended section
-            self.assertNotIn('rec-image', post_viewer_html)
+                self.assertNotIn('fa-heart', post_author_html)
 
-            # like post
-            post_id = Post.query.filter_by(content='Like this post').first().id
-            like_post_res = client.post(f'/user/1/group/1/{post_id}/like', follow_redirects=True)
-            like_post_html = like_post_res.get_data(as_text=True)
+                # login user 1
+                client.post('/login', data={
+                'username': 'testuser',
+                'password': 'password'
+                })
+                
+                # post viewer
+                post_viewer_res = client.get('/user/1/group/1')
+                post_viewer_html = post_viewer_res.get_data(as_text=True)
 
-            self.assertIn("1 like", like_post_html)
-            self.assertIn("fas fa-heart", like_post_html)
+                self.assertIn('far fa-heart', post_viewer_html)
 
-            # top-recommended section
-            self.assertIn("rec-image", like_post_html)
+                # top-recommended section
+                self.assertNotIn('rec-image', post_viewer_html)
 
-            # (check db)
-            like = Likes.query.filter_by(id=1).first()
-            self.assertEqual(like.user_id, 1)
-            self.assertEqual(like.post_id, post_id)
+                # like post
+                post_id = Post.query.filter_by(content='Like this post').first().id
+                like_post_res = client.post(f'/user/1/group/1/{post_id}/like', follow_redirects=True)
+                like_post_html = like_post_res.get_data(as_text=True)
 
-            # unlike post
-            unlike_post_res = client.delete(f'/user/1/group/1/{post_id}/unlike', follow_redirects=True)
-            unlike_post_html = unlike_post_res.get_data(as_text=True)
+                self.assertIn("1 like", like_post_html)
+                self.assertIn("fas fa-heart", like_post_html)
 
-            self.assertNotIn("1 like", unlike_post_html)
-            self.assertIn("far fa-heart", unlike_post_html)
+                # top-recommended section
+                self.assertIn("rec-image", like_post_html)
 
-            # (check db)
-            again_like = Likes.query.filter_by(id=1).first()
-            self.assertEqual(again_like, None)
+                # (check db)
+                like = Likes.query.filter_by(id=1).first()
+                self.assertEqual(like.user_id, 1)
+                self.assertEqual(like.post_id, post_id)
+
+                # unlike post
+                unlike_post_res = client.delete(f'/user/1/group/1/{post_id}/unlike', follow_redirects=True)
+                unlike_post_html = unlike_post_res.get_data(as_text=True)
+
+                self.assertNotIn("1 like", unlike_post_html)
+                self.assertIn("far fa-heart", unlike_post_html)
+
+                # (check db)
+                again_like = Likes.query.filter_by(id=1).first()
+                self.assertEqual(again_like, None)
 
 
     def test_delete_post(self):
         """Test deleting a post works."""
 
         with app.test_client() as client:
-            client.post('/user/2/group/1/join')
-            resp = client.post('/user/2/group/1/post', data = {'content': 'Delete this post'}, follow_redirects=True)
-            html = resp.get_data(as_text=True)
+            with self.client:
+                # login user 2
+                client.post('/login', data={
+                'username': 'testuserjr',
+                'password': 'passwordjr'
+                })
 
-            self.assertIn("Delete this post", html)
-            self.assertIn("fa-trash-alt", html)
+                client.post('/user/2/group/1/join')
+                resp = client.post('/user/2/group/1/post', data = {'content': 'Delete this post'}, follow_redirects=True)
+                html = resp.get_data(as_text=True)
 
-            # follow_redirects=true
-            delete_resp = client.delete('/user/2/group/1/1/delete', follow_redirects=True)
-            delete_html = delete_resp.get_data(as_text=True)
+                self.assertIn("Delete this post", html)
+                self.assertIn("fa-trash-alt", html)
 
-            self.assertEqual(delete_resp.status_code, 200)
-            self.assertNotIn("Delete this post", delete_html)
+                # follow_redirects=true
+                delete_resp = client.delete('/user/2/group/1/1/delete', follow_redirects=True)
+                delete_html = delete_resp.get_data(as_text=True)
 
-            # check db
-            post = Post.query.filter_by(id=1).first()
-            self.assertEqual(post, None)
+                self.assertEqual(delete_resp.status_code, 200)
+                self.assertNotIn("Delete this post", delete_html)
 
-
-class TestSpotifyAPI(TestCase):
-    """Testing spotify routes."""
-
-    def setUp(self):
-        self.client = app.test_client()
-        db.drop_all()
-        db.create_all()
-
-        # create test user
-        self.test_user = User(full_name='Test User', username='testuser', password='password')
-        db.session.add(self.test_user)
-        db.session.commit()
-
-        # create test group (user 1 admin)
-        self.test_group = Group(name='Test Group', description='A group for testing', admin_id=1)
-        db.session.add(self.test_group)
-        db.session.commit()
-
-
-    def tearDown(self):
-        db.session.rollback()
-        return super().tearDown()
+                # check db
+                post = Post.query.filter_by(id=1).first()
+                self.assertEqual(post, None)
 
 
     def test_search_spotify_route(self):
         """Test search-spotify modal works."""
 
         with app.test_client() as client:
-            resp = client.get('/user/1/group/1/search_spotify')
-            html = resp.get_data(as_text=True)
+            with self.client:
+                # login user 1
+                client.post('/login', data={
+                'username': 'testuser',
+                'password': 'password'
+                })
 
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Search for songs", html)
+                resp = client.get('/user/1/group/1/search_spotify')
+                html = resp.get_data(as_text=True)
 
-
-    def test_spotify_api(self):
-        """Test search of the spotify api."""
-
-        with app.test_client() as client:
-            resp = client.post('/user/1/group/1/search_spotify', data={'query': 'time'})
-            html = resp.get_data(as_text=True)
-
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("time", html)
-            self.assertIn('<div class="spotify-search-res">', html)
+                self.assertEqual(resp.status_code, 200)
+                self.assertIn("Search for songs", html)
