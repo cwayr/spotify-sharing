@@ -45,12 +45,18 @@ def signup():
         username = form.username.data
         password = form.password.data
 
-        newUser = User.user_signup(name, username, password)
-        db.session.add(newUser)
-        db.session.commit()
+        username_availibility = User.query.filter_by(username=form.username.data).first()
 
-        login_user(newUser)
-        return redirect(f"/user/{newUser.id}")
+        if username_availibility:
+            form.username.errors = ["Username already taken."]
+            return render_template("signup.html", form=form)
+        else:
+            newUser = User.user_signup(name, username, password)
+            db.session.add(newUser)
+            db.session.commit()
+
+            login_user(newUser)
+            return redirect(f"/user/{newUser.id}")
 
     return render_template("signup.html", form=form)
 

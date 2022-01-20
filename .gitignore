@@ -3,3 +3,4 @@
 *.vscode
 /flask_session
 api_keys.py
+.coverage
