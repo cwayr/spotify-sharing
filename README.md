@@ -6,6 +6,8 @@ An app for sharing music with friends.
 
 Built with Python, Flask, SQLAlchemy, PostgreSQL, HTML/Jinja, CSS, JavaScript.
 
+This app makes use of [Spotify's web API](https://developer.spotify.com/documentation/web-api/).
+
 Users can sign up and create and join groups. Groups are made up of a post feed, where users can share songs with each other. Posts are likeable and the most-liked songs will be displayed in a list on the group page.
 <br />
 
@@ -26,9 +28,8 @@ Run in terminal:
   > Inside of `api_keys.py`, set following variables:
   >
   > - `CLIENT_ID = {Client ID}`
-  > - `CLIENT_SECRET = {Client Secret}`
-  >
-  > Both Client ID and Client Secret can be acquired through [Spotify's Web API]('https://developer.spotify.com/documentation/general/guides/authorization/app-settings/')
+  > - `CLIENT_SECRET = {Client Secret}` > <br />
+  >   Both Client ID and Client Secret can be acquired through [Spotify's Web API](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/)
 - `flask run` (run application)
 
 #### Testing
@@ -41,9 +42,14 @@ Run in terminal:
 
 <br />
 <img src="./static/images/db_diagram.jpg" width="800"/>
+
+(Database diagram created with [dbdiagram.io](https://dbdiagram.io/home))
 </br >
+
 <hr />
+
 ## Demo Screenshots
+
 <br />
 <img src="./static/images/group_page_demo.jpg" width="700">
 <img src="./static/images/spotify_search_demo.jpg" width="700">
