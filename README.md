@@ -28,7 +28,8 @@ Run in terminal:
   > Inside of `api_keys.py`, set following variables:
   >
   > - `CLIENT_ID = {Client ID}`
-  > - `CLIENT_SECRET = {Client Secret}` > <br />
+  > - `CLIENT_SECRET = {Client Secret}`
+  > 
   >   Both Client ID and Client Secret can be acquired through [Spotify's Web API](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/)
 - `flask run` (run application)
 
