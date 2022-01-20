@@ -10,7 +10,9 @@ Users can sign up and create and join groups. Groups are made up of a post feed,
 <br />
 
 <hr />
+
 ## To get Started (💻 Dev)
+
 <br />
 Run in terminal:
 
@@ -29,7 +31,7 @@ Run in terminal:
   > Both Client ID and Client Secret can be acquired through [Spotify's Web API]('https://developer.spotify.com/documentation/general/guides/authorization/app-settings/')
 - `flask run` (run application)
 
-####Testing
+#### Testing
 
 - To test application, run `python3 -m unittest discover tests/` from root directory
 <br />
