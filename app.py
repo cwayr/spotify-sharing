@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_session import Session
 from models import db, connect_db, User
@@ -9,12 +11,14 @@ from routes.group_routes import group_routes
 
 app = Flask(__name__)
 
-if app.config["ENV"] == "production":
-    app.config.from_object('config.ProductionConfig')
-elif app.config["ENV"] == "testing":
-    app.config.from_object('config.TestingConfig')
-else:
-    app.config.from_object('config.DevelopmentConfig')
+# if app.config["ENV"] == "production":
+#     app.config.from_object('config.ProductionConfig')
+# elif app.config["ENV"] == "testing":
+#     app.config.from_object('config.TestingConfig')
+# else:
+#     app.config.from_object('config.DevelopmentConfig')'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
 server_session = Session(app) # server-side session storage
 
