@@ -2,6 +2,8 @@
 
 ![Code Coverage](coverage.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/a315edd27ca938e099b4/maintainability)](https://codeclimate.com/github/cwaymeyer/spotify-sharing/maintainability) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0640eac1afb1428ca2375fbce7529141)](https://www.codacy.com/gh/cwaymeyer/spotify-sharing/dashboard?utm_source=github.com&utm_medium=referral&utm_content=cwaymeyer/spotify-sharing&utm_campaign=Badge_Grade)
 
+▶ [Live site](https://spotify-sharing.herokuapp.com) ◀ (deployed through Heroku).
+
 An app for sharing music with friends.
 
 Built with Python, Flask, SQLAlchemy, PostgreSQL, HTML/Jinja, CSS, JavaScript.
