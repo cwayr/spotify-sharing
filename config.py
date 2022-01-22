@@ -36,7 +36,6 @@ class ProductionConfig(Config):
     """Configurations for production."""
 
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     ENV = 'production'
 
 
