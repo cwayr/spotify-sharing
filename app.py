@@ -14,7 +14,7 @@ if app.config["ENV"] == "production":
 elif app.config["ENV"] == "testing":
     app.config.from_object('config.TestingConfig')
 else:
-    app.config.from_object('config.DevelopmentConfig')'
+    app.config.from_object('config.DevelopmentConfig')
 
 server_session = Session(app) # server-side session storage
 
